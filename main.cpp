@@ -8,10 +8,13 @@ using namespace KamataEngine;
 int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int) {
 
 	// エンジンの初期化
-	KamataEngine::Initialize(L"LE2C_18_タケウチ_ハルカ_AL3");
+	KamataEngine::Initialize(L"LE2C_18_タケウチ_ハルカ");
 
 	// DirectXCommonインスタンスの取得
 	DirectXCommon* dxCommon = DirectXCommon::GetInstance();
+
+	// ImGuiManagerインスタンスの取得
+	ImGuiManager* imguiManager = ImGuiManager::GetInstance();
 
 	// ゲームシーンのインスタンス生成
 	GameScene* gameScene = new GameScene();
@@ -25,16 +28,28 @@ int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int) {
 			break;
 		}
 
+		// ImGui受付開始
+		imguiManager->Begin();
+
 		// ゲームシーンの更新
 		gameScene->Update();
+
+		// Imgui受付終了
+		imguiManager->End();
 
 		// 描画開始
 		dxCommon->PreDraw();
 
-		// 描画処理をここに記述
 		// ゲームシーンの描画
 		gameScene->Draw();
 
+		// 軸表示の描画
+		AxisIndicator::GetInstance()->Draw();
+
+		// ImGui描画
+		imguiManager->Draw();
+
+		// 描画終了
 		dxCommon->PostDraw();
 	}
 
