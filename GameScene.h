@@ -22,4 +22,8 @@ private:
 
 	KamataEngine::Model* modelBlock_ = nullptr;
 	KamataEngine::Camera camera_;
+	KamataEngine::DebugCamera* debugCamera_ = nullptr;
+
+
+	bool isDebugCameraActive_ = false;
 };

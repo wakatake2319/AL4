@@ -128,6 +128,11 @@ void GameScene::Initialize() {
 	modelBlock_ = Model::Create();
 	camera_.Initialize();
 
+	// デバッグカメラの生成
+	debugCamera_ = new DebugCamera(1280, 720);
+
+	// ============================================
+	// ↓ジェネレイトブロックにいれるコード
 	// 要素数
 	const uint32_t kNumBlockVirtical = 10;
 	const uint32_t kNumBlockHorizontal = 20;
@@ -141,6 +146,7 @@ void GameScene::Initialize() {
 		// 1列の総素数を設定(横方向のブロック数)
 		worldTransformBlocks_[i].resize(kNumBlockHorizontal);
 	}
+
 	// キューブの生成
 	for (uint32_t i = 0; i < kNumBlockVirtical; ++i) {
 		for (uint32_t j = 0; j < kNumBlockHorizontal; ++j) {
@@ -154,6 +160,7 @@ void GameScene::Initialize() {
 			worldTransformBlocks_[i][j]->translation_.y = kBlockHeight * i;
 		}
 	}
+	// ============================================
 }
 GameScene::GameScene() {}
 
@@ -165,6 +172,7 @@ GameScene::~GameScene() {
 	}
 	worldTransformBlocks_.clear();
 	delete modelBlock_;
+	delete debugCamera_;
 }
 // 更新
 void GameScene::Update() {
@@ -179,6 +187,30 @@ void GameScene::Update() {
 			// 定数バッファに転送する
 			worldTransformBlock->TransferMatrix();
 		}
+	}
+	// デバッグカメラの更新
+	debugCamera_->Update();
+
+#ifdef _DEBUG
+	if (Input::GetInstance()->TriggerKey(DIK_SPACE)) {
+		isDebugCameraActive_ = !isDebugCameraActive_;
+	}
+#endif
+
+	// カメラの処理
+	if (isDebugCameraActive_) {
+		debugCamera_->Update();
+		// デバッグカメラのビュー行列
+		camera_.matView = debugCamera_->GetCamera().matView;
+		// デバッグカメラのプロジェクション行列
+		camera_.matProjection = debugCamera_->GetCamera().matProjection;
+
+
+		// ビュープロジェクション行列の転送
+		camera_.TransferMatrix();
+	} else {
+		// ビュープロジェクション行列の更新と転送
+		camera_.UpdateMatrix();
 	}
 }
 
