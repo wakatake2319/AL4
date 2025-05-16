@@ -127,11 +127,15 @@ void GameScene::Initialize() {
 
 	modelBlock_ = Model::Create();
 	camera_.Initialize();
+
+
+
 	// 3Dモデルの生成
 	modelSkydome_ = Model::CreateFromOBJ("skydome", true);
 
 	// デバッグカメラの生成
 	debugCamera_ = new DebugCamera(1280, 720);
+
 
 	// ============================================
 	// ↓ジェネレイトブロックにいれるコード
