@@ -127,6 +127,8 @@ void GameScene::Initialize() {
 
 	modelBlock_ = Model::Create();
 	camera_.Initialize();
+	// 3Dモデルの生成
+	modelSkydome_ = Model::CreateFromOBJ("skydome", true);
 
 	// デバッグカメラの生成
 	debugCamera_ = new DebugCamera(1280, 720);
@@ -173,6 +175,7 @@ GameScene::~GameScene() {
 	worldTransformBlocks_.clear();
 	delete modelBlock_;
 	delete debugCamera_;
+	delete modelSkydome_;
 }
 // 更新
 void GameScene::Update() {
