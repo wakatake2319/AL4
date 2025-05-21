@@ -1,18 +1,24 @@
 #include "Skydome.h"
 
 // 初期化
-void Skydome::Initialize() {
+void Skydome::Initialize(Model* model, Camera* camera) {
+	worldTransform_.Initialize();
 
-
+	model_ = model; 
+	camera_ = camera;
 }
 
+
 // 更新
-void Skydome::Update() {}
+void Skydome::Update() {
+
+	worldTransform_.TransferMatrix(); }
+
 
 // 描画
 void Skydome::Draw() {
 
 	// 3Dモデル描画
-	model_->Draw(worldTransform_, camera_);
+	model_->Draw(worldTransform_, *camera_);
 
 }

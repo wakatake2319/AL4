@@ -7,7 +7,7 @@ using namespace KamataEngine;
 class Skydome {
 public:
 	// 初期化
-	void Initialize();
+	void Initialize(Model* model, Camera* camera);
 
 	// 更新
 	void Update();
@@ -24,5 +24,8 @@ private:
 	Model* model_ = nullptr;
 
 	// カメラ
-	Camera camera_;
+	Camera* camera_;
+
+	// スカイドーム
+	Skydome* skydome_ = nullptr;
 };
