@@ -1,24 +1,29 @@
 #pragma once
 #include "KamataEngine.h"
 #include "Skydome.h"
-#include <vector>
+#include "MapChipField.h"
+
 
 using namespace KamataEngine;
 
 
 class GameScene {
 public:
-	// 初期化
-	void Initialize();
 
 	GameScene();
 	~GameScene();
+	// 初期化
+	void Initialize();
 
 	// 更新
 	void Update();
 
 	// 描画
 	void Draw();
+
+	// 表示ブロックの生成
+	void GenerateBlocks();
+
 
 private:
 	std::vector<std::vector<WorldTransform*>> worldTransformBlocks_;
@@ -38,4 +43,7 @@ private:
 	DebugCamera* debugCamera_ = nullptr;
 	bool isDebugCameraActive_ = false;
 
+
+	// マップチップフィールド
+	MapChipField* mapChipField_;
 };
