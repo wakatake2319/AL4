@@ -143,6 +143,9 @@ void GameScene::Initialize() {
 
 	modelBlock_ = Model::CreateFromOBJ("block");
 
+
+
+
 	// 3Dモデルの生成
 	modelSkydome_ = Model::CreateFromOBJ("skydome", true);
 	skydome_ = new Skydome();
@@ -159,7 +162,7 @@ void GameScene::Initialize() {
 	// マップチップの初期化
 	mapChipField_ = new MapChipField;
 	mapChipField_->LoadMapChipCsv("Resources/blocks.csv");
-
+	GenerateBlocks();
 
 
 }
