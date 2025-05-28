@@ -26,7 +26,7 @@ public:
 	MapChipType GetMapChipTypeByIndex(uint32_t xIndex, uint32_t yIndex);
 
 	// マップチップ座標の取得
-	KamataEngine::Vector3 GetMapChipPositionByIndex(uint32_t xIndex, uint32_t yIndex);
+	Vector3 GetMapChipPositionByIndex(uint32_t xIndex, uint32_t yIndex);
 
 	static uint32_t GetNumBlockVirtical();
 	static uint32_t GetNumBlockHorizontal();
