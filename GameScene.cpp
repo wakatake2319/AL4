@@ -144,8 +144,6 @@ void GameScene::Initialize() {
 	modelBlock_ = Model::CreateFromOBJ("block");
 
 
-
-
 	// 3Dモデルの生成
 	modelSkydome_ = Model::CreateFromOBJ("skydome", true);
 	skydome_ = new Skydome();
@@ -157,13 +155,21 @@ void GameScene::Initialize() {
 	camera_.Initialize();
 
 
-
-
 	// マップチップの初期化
 	mapChipField_ = new MapChipField;
 	mapChipField_->LoadMapChipCsv("Resources/blocks.csv");
 	GenerateBlocks();
 
+
+	// プレイヤーの初期化
+	player_ = new Player();
+
+	// プレイヤーのモデル
+	//player_model_ = Model::CreateFromOBJ(モデルネーム,"player");
+
+	// プレイヤーの初期配置をマップチップ単位で指定
+	Vector3 playerPosition = mapChipField_->GetMapChipPositionByIndex(0, 0);
+	player_->Initialize(modelBlock_, &camera_, playerPosition);
 
 }
 

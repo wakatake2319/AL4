@@ -2,7 +2,7 @@
 #include "KamataEngine.h"
 #include "Skydome.h"
 #include "MapChipField.h"
-
+#include "Player.h"
 
 using namespace KamataEngine;
 
@@ -46,4 +46,8 @@ private:
 
 	// マップチップフィールド
 	MapChipField* mapChipField_;
+
+	// プレイヤー
+	Player* player_ = nullptr;
+
 };
