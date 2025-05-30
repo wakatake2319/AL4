@@ -1,5 +1,4 @@
 #include "GameScene.h"
-#include "Skydome.h"
 #include "KamataEngine.h"
 #include <Windows.h>
 

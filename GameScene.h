@@ -10,7 +10,6 @@ using namespace KamataEngine;
 class GameScene {
 public:
 
-	GameScene();
 	~GameScene();
 	// 初期化
 	void Initialize();
@@ -26,17 +25,21 @@ public:
 
 
 private:
+
+
+
+
+	// ブロック
+	Model* modelBlock_ = nullptr;
 	std::vector<std::vector<WorldTransform*>> worldTransformBlocks_;
 
-	// モデル
-	Model* modelBlock_ = nullptr;
-	Model* modelSkydome_ = nullptr;
 
 	// カメラ
 	Camera camera_;
 
 	// スカイドーム
 	Skydome* skydome_ = nullptr;
+	Model* modelSkydome_ = nullptr;
 
 
 	// デバッグカメラ
@@ -49,5 +52,6 @@ private:
 
 	// プレイヤー
 	Player* player_ = nullptr;
+	Model* player_model_ = nullptr;
 
 };
