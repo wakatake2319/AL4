@@ -2,6 +2,8 @@
 
 // 初期化
 void Skydome::Initialize(Model* model, Camera* camera) {
+	assert(model);
+
 	worldTransform_.Initialize();
 
 	model_ = model; 

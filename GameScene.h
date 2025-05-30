@@ -2,6 +2,7 @@
 #include "KamataEngine.h"
 #include "Skydome.h"
 #include <vector>
+#include "Player.h"
 
 using namespace KamataEngine;
 
@@ -25,17 +26,30 @@ private:
 
 	// モデル
 	Model* modelBlock_ = nullptr;
-	Model* modelSkydome_ = nullptr;
 
 	// カメラ
 	Camera camera_;
 
 	// スカイドーム
 	Skydome* skydome_ = nullptr;
+	Model* modelSkydome_ = nullptr;
+
 
 
 	// デバッグカメラ
 	DebugCamera* debugCamera_ = nullptr;
 	bool isDebugCameraActive_ = false;
 
+	// テクスチャハンドル
+	uint32_t textureHandle_ = 0;
+	// スプライト
+	Sprite* sprite_ = nullptr;
+	// 3Dモデル
+	Model* model_ = nullptr;
+	// ワールドトランスフォーム
+	WorldTransform worldTransform_;
+	// プレイヤー
+	Player* player_ = nullptr;
+	// プレイヤーモデル
+	Model* player_model_ = nullptr;
 };

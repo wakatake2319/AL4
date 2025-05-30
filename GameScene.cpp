@@ -125,10 +125,24 @@ Matrix4x4 MakeAffineMatrix(const Vector3& scale, const Vector3& rot, const Vecto
 // 初期化
 void GameScene::Initialize() {
 
-	modelBlock_ = Model::Create();
+		// ファイル名を指定してテクスチャを読み込む
+	textureHandle_ = TextureManager::Load("sample.png");
+	// スプライトの生成
+	sprite_ = Sprite::Create(textureHandle_, {100, 50});
+	// 3Dモデルの生成
+	model_ = Model::Create();
+	// ワールドトランスフォームの初期化
+	worldTransform_.Initialize();
+	// カメラの初期化
+	camera_.Initialize();
 
+	modelBlock_ = Model::CreateFromOBJ("block");
 
-
+	// Playerの生成
+	player_ = new Player();
+	// Playerの初期化
+	player_model_ = Model::CreateFromOBJ("player");
+	player_->Initialize(player_model_, textureHandle_, &camera_);
 
 	// 3Dモデルの生成
 	modelSkydome_ = Model::CreateFromOBJ("skydome", true);
@@ -145,8 +159,8 @@ void GameScene::Initialize() {
 	const uint32_t kNumBlockVirtical = 10;
 	const uint32_t kNumBlockHorizontal = 20;
 	// ブロック1子分の横幅
-	const float kBlockWidth = 2.0f;
-	const float kBlockHeight = 2.0f;
+	const float kBlockWidth = 1.0f;
+	const float kBlockHeight = 1.0f;
 	// 要素数を変更する
 	// 列数設定(縦方向のブロック数)
 	worldTransformBlocks_.resize(kNumBlockVirtical);
@@ -185,6 +199,9 @@ GameScene::~GameScene() {
 }
 // 更新
 void GameScene::Update() {
+	player_->Update();
+	skydome_->Update();
+
 	// ブロックの更新
 	for (std::vector<WorldTransform*>& worldTransformBlockLine : worldTransformBlocks_) {
 		for (WorldTransform* worldTransformBlock : worldTransformBlockLine) {
@@ -237,5 +254,6 @@ void GameScene::Draw() {
 		}
 	}
 	skydome_->Draw();
+	player_->Draw();
 	Model::PostDraw();
 }
