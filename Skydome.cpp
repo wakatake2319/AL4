@@ -11,8 +11,8 @@ void Skydome::Initialize(Model* model, Camera* camera) {
 
 // 更新
 void Skydome::Update() {
-
-	worldTransform_.TransferMatrix(); }
+	worldTransform_.TransferMatrix(); 
+}
 
 
 // 描画

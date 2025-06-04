@@ -3,6 +3,7 @@
 #include "Skydome.h"
 #include "MapChipField.h"
 #include "Player.h"
+#include "CameraController.h"
 
 using namespace KamataEngine;
 
@@ -53,5 +54,8 @@ private:
 	// プレイヤー
 	Player* player_ = nullptr;
 	Model* player_model_ = nullptr;
+
+	// カメラコントローラー
+	CameraController* cameraController_ = nullptr;
 
 };
