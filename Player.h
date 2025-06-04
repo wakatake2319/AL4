@@ -28,17 +28,30 @@ private:
 	// 速度
 	Vector3 velocity_ = {};
 
+	// ================================
+	// 移動
+	// ================================
 	// 慣性移動
 	static inline const float kAcceleration = 0.01f;
-
 	// 減速
 	static inline const float kAtteleration = 0.05f;
-
 	// 最大速度
 	static inline const float kLimitRunSpeed = 0.3f;
 
+
+	// ===============================
+	// 振り向き
+	// ===============================
+	// 角度補強
+	float turnFirstRotationY_ = 0.0f;
+	// 旋回タイマー
+	float turnTimer_ = 0.0f;
+	// 旋回時間
+	static inline const float kTimeTurn = 0.3f;
 	// 左右の振り向き
 	LRDirection lrDirection_ = LRDirection::kRight;
+
+
 
 	// モデル
 	Model* model_ = nullptr;

@@ -1,3 +1,5 @@
+#define NOMINMAX
+
 #include "Player.h"
 #include <algorithm>
 #include <cassert>
@@ -38,6 +40,10 @@ void Player::Update() {
 			// 左右状態切り替え
 			if (lrDirection_ != LRDirection::kRight) {
 				lrDirection_ = LRDirection::kRight;
+				// 旋回開始時の角度を記録する
+				turnFirstRotationY_ = worldTransform_.rotation_.y;
+				// 旋回タイマーに時間を設定する
+				turnTimer_ = kTimeTurn;
 			}
 
 		} else if (Input::GetInstance()->PushKey(DIK_LEFT)) {
@@ -53,6 +59,10 @@ void Player::Update() {
 			// 左右状態切り替え
 			if (lrDirection_ != LRDirection::kLeft) {
 				lrDirection_ = LRDirection::kLeft;
+				// 旋回開始時の角度を記録する
+				turnFirstRotationY_ = worldTransform_.rotation_.y;
+				// 旋回タイマーに時間を設定する
+				turnTimer_ = kTimeTurn;
 			}
 		}
 
@@ -66,18 +76,27 @@ void Player::Update() {
 		velocity_.x *= (1.0f - kAtteleration);
 	}
 
+
 	// 移動
 	worldTransform_.translation_ += velocity_;
 
+
 	// 旋回制御
-	float destinationRotationYTable[] = {
-	    std::numbers::pi_v<float> / 2.0f,
-	    std::numbers::pi_v<float> * 3.0f / 2.0f
-	};
+	if (turnTimer_ > 0.0f) {
 
-	float destinationRotationY = destinationRotationYTable[static_cast<int>(lrDirection_)];
+		// タイマーを進める
+		turnTimer_ = std::max(turnTimer_ - (1.0f / 60.0f), 0.0f);
 
-	worldTransform_.rotation_.y = destinationRotationY;
+		// 左右の自キャラ角度テーブル
+		float destinationRotationYTable[] = {std::numbers::pi_v<float> / 2.0f, std::numbers::pi_v<float> * 3.0f / 2.0f};
+
+		// 状態に応じた目標角度を取得する
+		float destinationRotationY = destinationRotationYTable[static_cast<int>(lrDirection_)];
+
+		// 自キャラの角度を設定する
+		worldTransform_.rotation_.y = EaseInOut(destinationRotationY, turnFirstRotationY_, turnTimer_ / kTimeTurn);
+		
+	}
 
 	WorldTransformUpdate(worldTransform_);
 }
