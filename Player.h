@@ -23,6 +23,9 @@ public:
 
 	const WorldTransform& GetWorldTransform() const { return worldTransform_; }
 
+	// 速度加算
+	const Vector3& GetVelocity() const { return velocity_; }
+
 private:
 	// ワールド変換データ
 	WorldTransform worldTransform_;

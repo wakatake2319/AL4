@@ -63,7 +63,15 @@ void GameScene::Initialize() {
 	camera_.Initialize();
 
 
+	// カメラコントロールの初期化
+	cameraController_ = new CameraController;
+	cameraController_->Initialize(&camera_);
+	cameraController_->SetTarget(player_);
+	cameraController_->Reset();
 
+	// カメラコントローラーの移動範囲の指定
+	CameraController::Rect cameraArea = {12.0f, 100 - 12.0f, 6.0f, 6.0f};
+	cameraController_->SetMovableArea(cameraArea);
 
 }
 
@@ -101,6 +109,7 @@ void GameScene::GenerateBlocks() {
 void GameScene::Update() {
 	player_->Update();
 	skydome_->Update();
+	cameraController_->Update();
 #ifdef _DEBUG
 	if (Input::GetInstance()->TriggerKey(DIK_SPACE)) {
 		isDebugCameraActive_ = !isDebugCameraActive_;
