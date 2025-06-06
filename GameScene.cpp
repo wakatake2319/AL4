@@ -46,13 +46,15 @@ void GameScene::Initialize() {
 	// プレイヤーのモデル
 	player_model_ = Model::CreateFromOBJ("player");
 	Vector3 playerPosition = mapChipField_->GetMapChipPositionByIndex(2, 18);
+
+	player_->SetMapChipField(mapChipField_);
 	player_->Initialize(player_model_, &camera_, playerPosition);
 
 
 	modelBlock_ = Model::CreateFromOBJ("block");
 
 
-	// 3Dモデルの生成
+	// 3Dモデル(天球)の生成
 	modelSkydome_ = Model::CreateFromOBJ("skydome", true);
 	skydome_ = new Skydome();
 	skydome_->Initialize(modelSkydome_, &camera_);

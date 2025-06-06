@@ -4,10 +4,28 @@
 
 using namespace KamataEngine;
 
+// 前方宣言
+class MapChipField;
+
 // 左右の振り向き
 enum class LRDirection {
 	kRight,
 	kLeft,
+};
+
+// 角
+enum Corner {
+	// 右下
+	kRightBottom,
+	// 左下
+	kLeftBottom,
+	// 右上
+	kRightTop,
+	// 左上
+	kLeftTop,
+
+	// 要素数
+	knumCorner
 };
 
 class Player {
@@ -25,6 +43,9 @@ public:
 
 	// 速度加算
 	const Vector3& GetVelocity() const { return velocity_; }
+
+	// マップチップフィールド
+	void SetMapChipField(MapChipField* mapchipField) { mapchipField_ = mapchipField; }
 
 private:
 	// ワールド変換データ
@@ -69,6 +90,44 @@ private:
 	// ジャンプ初速(上方向)
 	static inline const float kJumpAcceleration = 20.0f;
 
+	// ================================
+	// プレイヤーの当たり判定
+	// ================================
+	static inline const float kWidth = 0.8f;
+	static inline const float kHeight = 0.8f;
+
+	// ======================
+	// 移動処理
+	// ======================
+	void InputMove();
+	// マップチップとの当たり判定情報
+	struct CollisionMapInfo {
+
+		// 天井衝突フラグ
+		bool ceilingCollisionFlag = false;
+
+		// 着地フラグ
+		bool landing = false;
+
+		// 壁接触フラグ
+		bool wallContact = false;
+
+		// 移動量
+		Vector3 move;
+	};
+
+	// 移動量を加味して衝突判定する
+	void MapCollision(CollisionMapInfo& info);
+	void MapCollisionUp(CollisionMapInfo& info);
+	void MapCollisionDown(CollisionMapInfo& info);
+	void MapCollisionRight(CollisionMapInfo& info);
+	void MapCollisionLeft(CollisionMapInfo& info);
+
+	// 指定した過度の座標計算
+	Vector3 CornerPosition(const Vector3& center, Corner corner);
+
+	// 当たり判定
+	MapChipField* mapchipField_ = nullptr;
 
 	// モデル
 	Model* model_ = nullptr;

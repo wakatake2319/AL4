@@ -4,6 +4,7 @@
 #include <algorithm>
 #include <cassert>
 #include <numbers>
+#include "MapChipField.h"
 
 void Player::Initialize(Model* model, Camera* camera, const Vector3& position) {
 
@@ -20,9 +21,9 @@ void Player::Initialize(Model* model, Camera* camera, const Vector3& position) {
 	camera_ = camera;
 }
 
-void Player::Update() {
+void Player::InputMove() {
 
-	// 接地状態
+		// 接地状態
 	if (onGround_) {
 
 		// =========================
@@ -81,7 +82,6 @@ void Player::Update() {
 
 			// 移動入力をしてない場合は減衰させる
 			velocity_.x *= (1.0f - kAtteleration);
-
 		}
 
 		// =========================
@@ -89,20 +89,98 @@ void Player::Update() {
 		// =========================
 		if (Input::GetInstance()->PushKey(DIK_UP)) {
 			// ジャンプ初速
-			velocity_ += Vector3(0.0f, kJumpAcceleration/60.0f, 0.0f);	
+			velocity_ += Vector3(0.0f, kJumpAcceleration / 60.0f, 0.0f);
 		}
 
 	} else {
 		// =========================
 		// 空中にいる時
 		// ========================
-		
+
 		// 落下速度
-		velocity_ += Vector3(0.0f, -kGravityAcceleration/60.0f, 0.0f);
+		velocity_ += Vector3(0.0f, -kGravityAcceleration / 60.0f, 0.0f);
 		// 落下速度の制限
 		velocity_.y = std::max(velocity_.y, -kLimitFallSpeed);
-
 	}
+
+}
+
+// 衝突判定
+void Player::MapCollision(CollisionMapInfo& info) {
+
+	MapCollisionUp(info);
+	MapCollisionDown(info);
+	MapCollisionRight(info);
+	MapCollisionLeft(info);
+
+}
+
+// 上の衝突判定
+void Player::MapCollisionUp(CollisionMapInfo& info) {
+
+	// 上昇あり?
+	if (info.move.y = 0) {
+		return;
+	}
+
+	// 移動後の4つの角の座標
+	std::array<Vector3, knumCorner> positionsNew;
+
+	for (uint32_t i = 0; i < positionsNew.size(); ++i) {
+		positionsNew[i] = CornerPosition(worldTransform_.translation_ + info.move, static_cast<Corner>(i));
+	}
+
+	MapChipType mapChipType;
+
+	// 真上の当たり判定を行う
+	bool hit = false;
+
+	// 左上点の当たり判定の設定
+	MapChipField::IndexSet indexSet;
+	indexSet = mapchipField_->GetMapChipIndexSetByPosition(positionsNew[kLeftTop]);
+	mapChipType = mapchipField_->GetMapChipTypeByIndex(indexSet.xIndex, indexSet.yIndex);
+	if (mapChipType == MapChipType::kBlock) {
+		hit = true;
+	}
+}
+
+// 下の衝突判定
+void Player::MapCollisionDown(CollisionMapInfo& info) {}
+// 右の衝突判定
+void Player::MapCollisionRight(CollisionMapInfo& info) {}
+// 左の衝突判定
+void Player::MapCollisionLeft(CollisionMapInfo& info) {}
+
+
+// 指定した角の座標計算
+Vector3 Player::CornerPosition(const Vector3& center, Corner corner) {
+
+	Vector3 offsetTable[] = {
+	    {+kWidth / 2.0f, -kHeight / 2.0f, 0}, //  kRightBottom
+	    {-kWidth / 2.0f, -kHeight / 2.0f, 0}, //  kLeftBottom
+	    {+kWidth / 2.0f, +kHeight / 2.0f, 0}, //  kRightTop
+	    {-kWidth / 2.0f, +kHeight / 2.0f, 0}  //  kLeftTop
+	};
+
+	return center + offsetTable[static_cast<uint32_t>(corner)];
+
+
+}
+
+
+
+
+void Player::Update() {
+
+	// 移動入力
+	InputMove();
+
+	// 衝突情報を初期化
+	CollisionMapInfo collisionMapInfo = {};
+	collisionMapInfo.move = velocity_;
+
+	// マップ衝突チェック
+	MapCollision(collisionMapInfo);
 
 	// 移動
 	worldTransform_.translation_ += velocity_;

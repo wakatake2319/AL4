@@ -19,6 +19,18 @@ struct MapChipData {
 
 class MapChipField {
 public:
+
+	// 座標からマップチップ番号を計算
+	struct IndexSet {
+		uint32_t xIndex;
+		uint32_t yIndex;
+	};
+
+
+	// 1ブロックのサイズ
+	static inline const float kBlockWidth = 1.0f;
+	static inline const float kBlockHeight = 1.0f;
+
 	void ResetMapChipData();
 	void LoadMapChipCsv(const std::string& filePath);
 
@@ -31,12 +43,13 @@ public:
 	static uint32_t GetNumBlockVirtical();
 	static uint32_t GetNumBlockHorizontal();
 
+	// 座標からマップチップ番号を計算
+	IndexSet GetMapChipIndexSetByPosition(const Vector3& position);
+
 private:
 	MapChipData mapChipData_;
 
-	// 1ブロックのサイズ
-	static inline const float kBlockWidth = 1.0f;
-	static inline const float kBlockHeight = 1.0f;
+
 	// ブロックの個数
 	static inline const uint32_t kNumBlockVirtical = 20;
 	static inline const uint32_t kNumBlockHorizontal = 100;
