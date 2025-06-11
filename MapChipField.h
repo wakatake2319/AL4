@@ -26,6 +26,13 @@ public:
 		uint32_t yIndex;
 	};
 
+	// ブロックの範囲
+	struct Rect {
+		float left;
+		float right;
+		float bottom;
+		float top;
+	};
 
 	// 1ブロックのサイズ
 	static inline const float kBlockWidth = 1.0f;
@@ -45,6 +52,9 @@ public:
 
 	// 座標からマップチップ番号を計算
 	IndexSet GetMapChipIndexSetByPosition(const Vector3& position);
+
+	// ブロック範囲取得関数
+	Rect GetRectByIndex(uint32_t xIndex, uint32_t yIndex);
 
 private:
 	MapChipData mapChipData_;

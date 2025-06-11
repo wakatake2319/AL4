@@ -47,6 +47,7 @@ public:
 	// マップチップフィールド
 	void SetMapChipField(MapChipField* mapchipField) { mapchipField_ = mapchipField; }
 
+
 private:
 	// ワールド変換データ
 	WorldTransform worldTransform_;
@@ -95,6 +96,9 @@ private:
 	// ================================
 	static inline const float kWidth = 0.8f;
 	static inline const float kHeight = 0.8f;
+
+
+	static inline const float kBlank = 0.04f;
 
 	// ======================
 	// 移動処理
