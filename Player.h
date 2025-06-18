@@ -133,6 +133,19 @@ private:
 	// 当たり判定
 	MapChipField* mapchipField_ = nullptr;
 
+	// 接地状態の切り替え
+	void isGround(const CollisionMapInfo& info);
+
+	// 壁接触状態の切り替え
+	void isWall(const CollisionMapInfo& info);
+
+	// 着地時の速度減衰率
+	static inline const float kAttenuationLanding = 0.1f;
+	// 微小な数値
+	static inline const float kGroundSearchHeight = 0.06f;
+	// 壁接触時の速度減衰率
+	static inline const float kAttenuationWall = 0.2f;
+
 	// モデル
 	Model* model_ = nullptr;
 	// テクスチャハンドル
