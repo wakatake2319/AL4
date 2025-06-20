@@ -29,7 +29,9 @@ GameScene::~GameScene() {
 	delete debugCamera_;
 	delete modelSkydome_;
 	delete mapChipField_;
-	delete enemy_;
+	for (Enemy* enemy : enemies_) {
+		delete enemy;
+	}
 }
 
 // 初期化
@@ -40,8 +42,6 @@ void GameScene::Initialize() {
 	mapChipField_->LoadMapChipCsv("Resources/blocks.csv");
 	GenerateBlocks();
 
-
-
 	// プレイヤーの初期化
 	player_ = new Player();
 	// プレイヤーのモデル
@@ -51,9 +51,7 @@ void GameScene::Initialize() {
 	player_->SetMapChipField(mapChipField_);
 	player_->Initialize(player_model_, &camera_, playerPosition);
 
-
 	modelBlock_ = Model::CreateFromOBJ("block");
-
 
 	// 3Dモデル(天球)の生成
 	modelSkydome_ = Model::CreateFromOBJ("skydome", true);
@@ -65,7 +63,6 @@ void GameScene::Initialize() {
 
 	camera_.Initialize();
 
-
 	// カメラコントロールの初期化
 	cameraController_ = new CameraController;
 	cameraController_->Initialize(&camera_);
@@ -76,13 +73,21 @@ void GameScene::Initialize() {
 	CameraController::Rect cameraArea = {12.0f, 100 - 12.0f, 6.0f, 6.0f};
 	cameraController_->SetMovableArea(cameraArea);
 
-	// エネミーの初期化
-	enemy_ = new Enemy; 
+
 	// 敵モデル
 	enemy_model_ = Model::CreateFromOBJ("enemy");
-	// エネミーの初期位置
-	Vector3 enemyPosition = mapChipField_->GetMapChipPositionByIndex(14, 18);
-	enemy_->Initialize(enemy_model_, &camera_, enemyPosition);
+
+	for (int32_t i = 0; i < 3; ++i) 
+	{
+
+		// エネミーの初期化
+		Enemy*newenemy_ = new Enemy;
+		// エネミーの初期位置
+		Vector3 enemyPosition = mapChipField_->GetMapChipPositionByIndex(14+i*2, 18);
+		newenemy_->Initialize(enemy_model_, &camera_, enemyPosition);
+
+		enemies_.push_back(newenemy_);
+	}
 }
 
 
@@ -120,7 +125,6 @@ void GameScene::Update() {
 	player_->Update();
 	skydome_->Update();
 	cameraController_->Update();
-	enemy_->Update();
 #ifdef _DEBUG
 	if (Input::GetInstance()->TriggerKey(DIK_SPACE)) {
 		isDebugCameraActive_ = !isDebugCameraActive_;
@@ -154,6 +158,10 @@ void GameScene::Update() {
 		}
 	}
 	debugCamera_->Update();
+
+	for (Enemy* enemy : enemies_) {
+		enemy->Update();
+	}
 }
 
 // 描画
@@ -163,8 +171,9 @@ void GameScene::Draw() {
 	Model::PreDraw(dxCommon->GetCommandList());
 	skydome_->Draw();
 	player_->Draw();
-	enemy_->Draw();
-
+	for (Enemy* enemy : enemies_) {
+		enemy->Draw();
+	}
 	for (std::vector<WorldTransform*>& worldTransformBlockLine : worldTransformBlocks_) {
 		for (WorldTransform* worldTransformBlock : worldTransformBlockLine) {
 			if (!worldTransformBlock)

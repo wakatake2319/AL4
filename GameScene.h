@@ -62,5 +62,6 @@ private:
 	// エネミー
 	Enemy* enemy_ = nullptr;
 	Model* enemy_model_ = nullptr;
-
+	// 敵の複数化
+	std::list<Enemy*> enemies_;
 };
