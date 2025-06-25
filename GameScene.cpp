@@ -32,6 +32,7 @@ GameScene::~GameScene() {
 	for (Enemy* enemy : enemies_) {
 		delete enemy;
 	}
+	delete deathParticles_;
 }
 
 // 初期化
@@ -165,6 +166,10 @@ void GameScene::Update() {
 
 	CheckAllCollisions();
 
+	if (deathParticles_) {
+		deathParticles_->Update();
+	}
+
 }
 
 // 描画
@@ -184,6 +189,10 @@ void GameScene::Draw() {
 			modelBlock_->Draw(*worldTransformBlock, camera_);
 		}
 	}
+	if (deathParticles_) {
+		deathParticles_->Draw();
+	}
+
 	Model::PostDraw();
 }
 

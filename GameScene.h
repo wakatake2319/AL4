@@ -5,6 +5,7 @@
 #include "Player.h"
 #include "CameraController.h"
 #include "Enemy.h"
+#include "DeatParticles.h"
 
 using namespace KamataEngine;
 
@@ -66,4 +67,7 @@ private:
 	Model* enemy_model_ = nullptr;
 	// 敵の複数化
 	std::list<Enemy*> enemies_;
+
+	// デスパーティクル
+	DeathParticles* deathParticles_ = nullptr;
 };
