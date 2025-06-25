@@ -25,6 +25,8 @@ public:
 	// 表示ブロックの生成
 	void GenerateBlocks();
 
+	// 全ての当たり判定を行う
+	void CheckAllCollisions();
 
 private:
 

@@ -6,6 +6,7 @@ using namespace KamataEngine;
 
 // 前方宣言
 class MapChipField;
+class Enemy;
 
 // 左右の振り向き
 enum class LRDirection {
@@ -47,6 +48,13 @@ public:
 	// マップチップフィールド
 	void SetMapChipField(MapChipField* mapchipField) { mapchipField_ = mapchipField; }
 
+		// ワールド座標を取得
+	Vector3 GetWorldPosition();
+
+	// AABB取得関数
+	AABB GetAABB();
+
+	void OnCollision(const Enemy* enemy);
 
 private:
 	// ワールド変換データ
@@ -145,6 +153,8 @@ private:
 	static inline const float kGroundSearchHeight = 0.06f;
 	// 壁接触時の速度減衰率
 	static inline const float kAttenuationWall = 0.2f;
+
+
 
 	// モデル
 	Model* model_ = nullptr;
