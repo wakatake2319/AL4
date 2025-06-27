@@ -56,6 +56,9 @@ public:
 
 	void OnCollision(const Enemy* enemy);
 
+		// デスフラグのgetter
+	bool IsDeath() const { return isDeath_; }
+
 private:
 	// ワールド変換データ
 	WorldTransform worldTransform_;
@@ -154,6 +157,8 @@ private:
 	// 壁接触時の速度減衰率
 	static inline const float kAttenuationWall = 0.2f;
 
+	// デスフラグ
+	bool isDeath_ = false;
 
 
 	// モデル

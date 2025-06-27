@@ -29,10 +29,18 @@ public:
 	// 全ての当たり判定を行う
 	void CheckAllCollisions();
 
+	bool IsFinished() const { return finished_; }
+
 private:
+	// ゲームのフェーズ
+	enum class Phase 
+	{
+		kplay,// ゲームプレイ
+		kDeath,// デス演出
+	};
 
-
-
+	// ゲームの現在のフェーズ
+	Phase phase_;
 
 	// ブロック
 	Model* modelBlock_ = nullptr;
@@ -73,4 +81,10 @@ private:
 
 	// デスパーティクルのモデル
 	Model* deathParticle_model_ = nullptr;
+
+	// フェーズの切り替え
+	void ChangePhase();
+
+	// 終了フラグ
+	bool finished_ = false;
 };
