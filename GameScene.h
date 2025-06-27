@@ -70,4 +70,7 @@ private:
 
 	// デスパーティクル
 	DeathParticles* deathParticles_ = nullptr;
+
+	// デスパーティクルのモデル
+	Model* deathParticle_model_ = nullptr;
 };

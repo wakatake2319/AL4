@@ -33,6 +33,7 @@ GameScene::~GameScene() {
 		delete enemy;
 	}
 	delete deathParticles_;
+	delete deathParticle_model_;
 }
 
 // 初期化
@@ -89,6 +90,13 @@ void GameScene::Initialize() {
 
 		enemies_.push_back(newenemy_);
 	}
+
+	// モデル読み込み
+	deathParticle_model_ = Model::CreateFromOBJ("deathParticle");
+
+	// 02_11_16枚目 仮の生成処理 後で消す
+	deathParticles_ = new DeathParticles;
+	deathParticles_->Initialize(deathParticle_model_, &camera_, playerPosition);
 }
 
 
