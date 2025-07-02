@@ -1,5 +1,6 @@
 #pragma once
 #include "KamataEngine.h"
+#include "Fade.h"
 
 using namespace KamataEngine;
 
@@ -34,4 +35,7 @@ private:
 
 	// 終了フラグ
 	bool finished_ = false;
+
+	// フェード
+	Fade* fade_ = nullptr;
 };

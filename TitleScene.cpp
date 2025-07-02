@@ -6,6 +6,7 @@
 TitleScene::~TitleScene() {
 	delete modelPlayer_;
 	delete modelTitle_;
+	delete fade_;
 }
 void TitleScene::Initialize() {
 	modelTitle_ = Model::CreateFromOBJ("titleFont", true);
@@ -31,8 +32,16 @@ void TitleScene::Initialize() {
 	worldTransformPlayer_.translation_.x = -2.0f;
 
 	worldTransformPlayer_.translation_.y = -10.0f;
+
+	// フェードの初期化
+	fade_ = new Fade();
+	fade_->Initialize();
+
 }
 void TitleScene::Update() {
+	fade_->Update();
+
+
 	if (Input::GetInstance()->PushKey(DIK_SPACE)) {
 		finished_ = true;
 	}
@@ -51,6 +60,7 @@ void TitleScene::Update() {
 
 	// アフィン変換～DirectXに転送（プレイヤー座標）
 	WorldTransformUpdate(worldTransformPlayer_);
+
 }
 
 void TitleScene::Draw() {
@@ -64,4 +74,6 @@ void TitleScene::Draw() {
 	modelPlayer_->Draw(worldTransformPlayer_, camera_);
 
 	Model::PostDraw();
+
+	fade_->Draw();
 }
