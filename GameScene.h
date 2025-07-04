@@ -6,6 +6,7 @@
 #include "CameraController.h"
 #include "Enemy.h"
 #include "DeatParticles.h"
+#include "Fade.h"
 
 using namespace KamataEngine;
 
@@ -35,8 +36,10 @@ private:
 	// ゲームのフェーズ
 	enum class Phase 
 	{
+		kFadeIn, // フェードイン
 		kplay,// ゲームプレイ
 		kDeath,// デス演出
+		kFadeOut, // フェードアウト
 	};
 
 	// ゲームの現在のフェーズ
@@ -87,4 +90,6 @@ private:
 
 	// 終了フラグ
 	bool finished_ = false;
+
+	Fade* fade_ = nullptr;
 };

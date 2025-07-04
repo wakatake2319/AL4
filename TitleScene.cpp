@@ -36,15 +36,37 @@ void TitleScene::Initialize() {
 	// フェードの初期化
 	fade_ = new Fade();
 	fade_->Initialize();
-
+	fade_->Start(Fade::Status::FadeIn, 1.0f);
 }
 void TitleScene::Update() {
-	fade_->Update();
+	
+	switch (phase_) {
+	case Phase::kFadeIn:
+		fade_->Update();
+		if (fade_->IsFinished()) {
+			phase_ = Phase::kMain;
+		}
+		break;
+	case Phase::kMain:
+		if (Input::GetInstance()->PushKey(DIK_SPACE)) {
+			fade_->Start(Fade::Status::FadeOut, 1.0f);
+			phase_ = Phase::kFadeOut;
+		}
+		break;
+	case Phase::kFadeOut:
+		fade_->Update();
+		if (fade_->IsFinished()) {
+			finished_ = true;
+		}
+		break;
 
-
-	if (Input::GetInstance()->PushKey(DIK_SPACE)) {
-		finished_ = true;
 	}
+
+
+
+	//if (Input::GetInstance()->PushKey(DIK_SPACE)) {
+	//	finished_ = true;
+	//}
 
 	counter_ += 1.0f / 60.0f;
 	counter_ = std::fmod(counter_, kTimeTitleMove);
