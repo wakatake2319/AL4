@@ -29,6 +29,15 @@ enum Corner {
 	knumCorner
 };
 
+enum class Behavior {
+	// 未定義
+	kUnknown = -1,
+	// 通常状態
+	kRoot,
+	// 攻撃中
+	kAttack,
+};
+
 class Player {
 public:
 	// 初期化
@@ -56,8 +65,20 @@ public:
 
 	void OnCollision(const Enemy* enemy);
 
-		// デスフラグのgetter
+	// デスフラグのgetter
 	bool IsDeath() const { return isDeath_; }
+
+	// 通常行動更新
+	void BehaviorRootUpdate();
+
+	// 攻撃行動更新
+	void BehaviorAttackUpdate();
+
+	// 通常行動初期化
+	void BehaviorRootInitialize();
+
+	// 攻撃行動初期化
+	void BehaviorAttackInitialize();
 
 private:
 	// ワールド変換データ
@@ -160,6 +181,24 @@ private:
 	// デスフラグ
 	bool isDeath_ = false;
 
+	// ================================
+	// Behaviorの定義
+	// ================================
+	// 振る舞い
+	Behavior behavior_ = Behavior::kRoot;
+
+	// 次の振る舞いのリクエスト
+	Behavior behaviorRequest_ = Behavior::kUnknown;
+
+
+	// ================================
+	// 行動カウンター
+	// ================================
+	// 攻撃ギミックの経過時間カウンター
+	uint32_t attackParameter_ = 0;
+
+
+
 
 	// モデル
 	Model* model_ = nullptr;
@@ -167,4 +206,6 @@ private:
 	uint32_t textureHandle_ = 0u;
 	// カメラ
 	Camera* camera_;
+
+
 };

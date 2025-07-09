@@ -417,7 +417,55 @@ Vector3 Player::CornerPosition(const Vector3& center, Corner corner) {
 
 void Player::Update() {
 
-	// 移動入力
+	// =========================
+	// Behavior遷移の実装
+	// =========================
+	if (behaviorRequest_ != Behavior::kUnknown) {
+		// 振る舞いを変更する
+		behavior_ = behaviorRequest_;
+		// 各振る舞いごとの初期化を実行
+		switch (behavior_) {	
+
+		// 通常行動
+		case Behavior::kRoot:
+		default:
+			BehaviorRootInitialize();
+			break;
+
+		// 攻撃行動
+		case Behavior::kAttack:
+			BehaviorAttackInitialize();
+			break;
+
+		}
+		// 振る舞いリクエストを初期化
+		behaviorRequest_ = Behavior::kUnknown; 
+	}
+
+
+	// =====================================
+	// 現在のビヘイビアに応じた毎フレームの処理
+	// =====================================
+	switch (behavior_) {
+	// 通常行動
+	case Behavior::kRoot:
+	default:
+		BehaviorRootUpdate();
+	break;
+
+	// 攻撃行動
+	case Behavior::kAttack:
+		BehaviorAttackUpdate();
+	break;
+	}
+
+
+
+	//BehaviorAttackUpdate();
+
+	//BehaviorRootUpdate();
+
+		// 移動入力
 	InputMove();
 
 	// 衝突情報を初期化
@@ -442,7 +490,7 @@ void Player::Update() {
 
 	// =========================
 	// 着地処理
-	// =========================	
+	// =========================
 	/*
 	// 着地フラグ
 	bool landing = false;
@@ -450,32 +498,32 @@ void Player::Update() {
 	// 地面との当たり判定
 	// 下降中?
 	if (velocity_.y < 0.0f) {
-		// Y座標が地面以下になったら着地
-		if (worldTransform_.translation_.y <= 1.0f) {
-			landing = true;
-		}
-	}	
+	    // Y座標が地面以下になったら着地
+	    if (worldTransform_.translation_.y <= 1.0f) {
+	        landing = true;
+	    }
+	}
 
 
 	// 接地判定
 	if (onGround_) {
-		// ジャンプ開始
-		if (velocity_.y > 0.0f) {
-			// 空中状態に移行
-			onGround_ = false;
-		}
+	    // ジャンプ開始
+	    if (velocity_.y > 0.0f) {
+	        // 空中状態に移行
+	        onGround_ = false;
+	    }
 	} else {
-		// 着地
-		if (landing) {
-			// めり込み要素
-			worldTransform_.translation_.y = 1.0f;
-			// 摩擦で横方向速度が減衰する
-			velocity_.x *= (1.0f - kAtteleration);
-			// 落下速度をリセット
-			velocity_.y = 0.0f;
-			// 着地
-			onGround_ = true;
-		}
+	    // 着地
+	    if (landing) {
+	        // めり込み要素
+	        worldTransform_.translation_.y = 1.0f;
+	        // 摩擦で横方向速度が減衰する
+	        velocity_.x *= (1.0f - kAtteleration);
+	        // 落下速度をリセット
+	        velocity_.y = 0.0f;
+	        // 着地
+	        onGround_ = true;
+	    }
 	}
 	*/
 
@@ -495,10 +543,10 @@ void Player::Update() {
 
 		// 自キャラの角度を設定する
 		worldTransform_.rotation_.y = EaseInOut(destinationRotationY, turnFirstRotationY_, turnTimer_ / kTimeTurn);
-		
 	}
 
 	WorldTransformUpdate(worldTransform_);
+
 }
 
 void Player::Draw() {
@@ -533,4 +581,121 @@ void Player::OnCollision(const Enemy* enemy) {
 	(void)enemy;
 	// デスフラグを立てる
 	isDeath_ = true;
+}
+
+// ================================
+// 通常行動更新
+// ================================
+void Player::BehaviorRootUpdate() {
+
+	
+	// 移動入力
+	InputMove();
+
+	// 衝突情報を初期化
+	CollisionMapInfo collisionMapInfo = {};
+	collisionMapInfo.move = velocity_;
+	collisionMapInfo.landing = false;
+	collisionMapInfo.wallContact = false;
+
+	// マップ衝突チェック
+	MapCollision(collisionMapInfo);
+
+	// 移動
+	worldTransform_.translation_ += collisionMapInfo.move;
+
+	// 天井接触による落下開始
+	if (collisionMapInfo.ceilingCollisionFlag) {
+		velocity_.y = 0;
+	}
+
+	// 接地判定
+	isGround(collisionMapInfo);
+
+	// =========================
+	// 着地処理
+	// =========================
+	/*
+	// 着地フラグ
+	bool landing = false;
+
+	// 地面との当たり判定
+	// 下降中?
+	if (velocity_.y < 0.0f) {
+	    // Y座標が地面以下になったら着地
+	    if (worldTransform_.translation_.y <= 1.0f) {
+	        landing = true;
+	    }
+	}
+
+
+	// 接地判定
+	if (onGround_) {
+	    // ジャンプ開始
+	    if (velocity_.y > 0.0f) {
+	        // 空中状態に移行
+	        onGround_ = false;
+	    }
+	} else {
+	    // 着地
+	    if (landing) {
+	        // めり込み要素
+	        worldTransform_.translation_.y = 1.0f;
+	        // 摩擦で横方向速度が減衰する
+	        velocity_.x *= (1.0f - kAtteleration);
+	        // 落下速度をリセット
+	        velocity_.y = 0.0f;
+	        // 着地
+	        onGround_ = true;
+	    }
+	}
+	*/
+
+	// =========================
+	// 旋回制御
+	// =========================
+	if (turnTimer_ > 0.0f) {
+
+		// タイマーを進める
+		turnTimer_ = std::max(turnTimer_ - (1.0f / 60.0f), 0.0f);
+
+		// 左右の自キャラ角度テーブル
+		float destinationRotationYTable[] = {std::numbers::pi_v<float> / 2.0f, std::numbers::pi_v<float> * 3.0f / 2.0f};
+
+		// 状態に応じた目標角度を取得する
+		float destinationRotationY = destinationRotationYTable[static_cast<int>(lrDirection_)];
+
+		// 自キャラの角度を設定する
+		worldTransform_.rotation_.y = EaseInOut(destinationRotationY, turnFirstRotationY_, turnTimer_ / kTimeTurn);
+	}
+
+	//WorldTransformUpdate(worldTransform_);
+
+	if (Input::GetInstance()->PushKey(DIK_A)) {
+		// 攻撃ビヘイビアをリクエスト
+		behaviorRequest_ = Behavior::kAttack;
+	}
+}
+
+void Player::BehaviorAttackUpdate() {
+		// 移動
+	//velocity_.x += kAcceleration;
+
+	// 予備動作
+	    attackParameter_ += 1;
+
+	//既定の時間経過で攻撃終了して通常状態に戻す
+	if (attackParameter_ >= 20.0f) {
+	    // 通常行動に戻す
+	    behaviorRequest_ = Behavior::kRoot;
+	}
+}
+
+void Player::BehaviorRootInitialize() {
+}
+
+void Player::BehaviorAttackInitialize() {
+	// カウンター初期化
+	attackParameter_ = 0;
+
 }
