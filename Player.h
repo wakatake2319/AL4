@@ -8,40 +8,56 @@ using namespace KamataEngine;
 class MapChipField;
 class Enemy;
 
-// 左右の振り向き
-enum class LRDirection {
-	kRight,
-	kLeft,
-};
 
-// 角
-enum Corner {
-	// 右下
-	kRightBottom,
-	// 左下
-	kLeftBottom,
-	// 右上
-	kRightTop,
-	// 左上
-	kLeftTop,
-
-	// 要素数
-	knumCorner
-};
-
-enum class Behavior {
-	// 未定義
-	kUnknown = -1,
-	// 通常状態
-	kRoot,
-	// 攻撃中
-	kAttack,
-};
 
 class Player {
 public:
+
+	// 左右の振り向き
+	enum class LRDirection {
+		kRight,
+		kLeft,
+	};
+
+	// 角
+	enum Corner {
+		// 右下
+		kRightBottom,
+		// 左下
+		kLeftBottom,
+		// 右上
+		kRightTop,
+		// 左上
+		kLeftTop,
+
+		// 要素数
+		knumCorner
+	};
+
+	// ビヘイビア
+	enum class Behavior {
+		// 未定義
+		kUnknown = -1,
+		// 通常状態
+		kRoot,
+		// 攻撃中
+		kAttack,
+	};
+
+	// 攻撃フェーズ
+	enum class AttackPhase {
+		// 未定義
+		kUnknown = -1,
+		// 溜め
+		kAnticipation,
+		// 攻撃
+		kAction,
+		// 余韻
+		kRecovery,
+	};
+
 	// 初期化
-	void Initialize(Model* model, Camera* camera, const Vector3& position);
+	void Initialize(Model* model, Model* modelAttack, Camera* camera, const Vector3& position);
 
 	// 更新
 	void Update();
@@ -79,6 +95,10 @@ public:
 
 	// 攻撃行動初期化
 	void BehaviorAttackInitialize();
+
+	// 攻撃しているかどうか
+	bool IsAttack() const { return behavior_ == Behavior::kAttack && attackPhase_ == AttackPhase::kAction; }
+
 
 private:
 	// ワールド変換データ
@@ -197,6 +217,14 @@ private:
 	// 攻撃ギミックの経過時間カウンター
 	uint32_t attackParameter_ = 0;
 
+	// 攻撃フェーズ
+	AttackPhase attackPhase_ = AttackPhase::kUnknown;
+	// 予備動作の時間
+	static inline const uint32_t kAnticipationTime = 8;
+	// 前進動作の時間
+	static inline const uint32_t kActionTime = 5;
+	// 余韻動作の時間
+	static inline const uint32_t kRecoveryTime = 12;
 
 
 
@@ -207,5 +235,8 @@ private:
 	// カメラ
 	Camera* camera_;
 
+	// 攻撃エフェクト
+	Model* modelAttack_ = nullptr;
+	WorldTransform worldTransformAttack_;
 
 };

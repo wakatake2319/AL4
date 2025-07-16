@@ -46,9 +46,10 @@ void GameScene::Initialize() {
 	// プレイヤーのモデル
 	player_model_ = Model::CreateFromOBJ("player");
 	Vector3 playerPosition = mapChipField_->GetMapChipPositionByIndex(2, 18);
+	modelAttack_ = Model::CreateFromOBJ("attack_effect");
 
 	player_->SetMapChipField(mapChipField_);
-	player_->Initialize(player_model_, &camera_, playerPosition);
+	player_->Initialize(player_model_, modelAttack_, &camera_, playerPosition);
 
 	modelBlock_ = Model::CreateFromOBJ("block");
 
@@ -80,7 +81,7 @@ void GameScene::Initialize() {
 		// エネミーの初期化
 		Enemy* newenemy_ = new Enemy;
 		// エネミーの初期位置
-		Vector3 enemyPosition = mapChipField_->GetMapChipPositionByIndex(14 + i * 6, 18);
+		Vector3 enemyPosition = mapChipField_->GetMapChipPositionByIndex(50 + i * 6, 18);
 		newenemy_->Initialize(enemy_model_, &camera_, enemyPosition);
 
 		enemies_.push_back(newenemy_);
@@ -150,6 +151,14 @@ void GameScene::GenerateBlocks() {
 
 // 更新
 void GameScene::Update() {
+
+	enemies_.remove_if ([](Enemy* enemy) {
+		if (enemy->isDeath()) {
+			delete enemy;
+			return true; // 削除対象
+		}
+		return false; // 削除対象ではない
+		});
 
 	ChangePhase();
 

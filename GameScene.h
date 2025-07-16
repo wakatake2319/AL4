@@ -69,6 +69,7 @@ private:
 	// プレイヤー
 	Player* player_ = nullptr;
 	Model* player_model_ = nullptr;
+	Model* modelAttack_ = nullptr;
 
 	// カメラコントローラー
 	CameraController* cameraController_ = nullptr;

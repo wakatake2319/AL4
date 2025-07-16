@@ -26,6 +26,20 @@ public:
 	// 衝突判定
 	void OnCollision(const Player* player);
 
+	// デスしたかどうか
+	bool isDeath() const { return isDeath_; }
+
+	// ビヘイビア
+	enum class Behavior {
+		// 未定義
+		kUnknown = -1,
+		// 通常状態/歩行
+		kRoot,
+		// デス演出
+		kDeath,
+	};
+
+
 private:
 	// ワールド変換データ
 	WorldTransform worldTransform_;
@@ -54,4 +68,8 @@ private:
 	// 当たり判定の大きさ
 	static inline const float kWidth = 0.8f;
 	static inline const float kHeight = 0.8f;
+
+	// デスフラグ
+	bool isDeath_ = false;
+
 };
