@@ -1,6 +1,7 @@
 #include "Enemy.h"
 #include <numbers>
 #include "Math.h"
+#include "Player.h"
 
 void Enemy::Initialize(Model* model, Camera* camera, const Vector3& position) {
 	assert(model);
@@ -21,20 +22,59 @@ void Enemy::Initialize(Model* model, Camera* camera, const Vector3& position) {
 }
 void Enemy::Update()
 {
-	// 移動
-	worldTransform_.translation_ += velocity_;
 
-	// タイマー加算
-	walkTimer_ += 1.0f / 60.0f;
+	// =========================
+	// Behavior遷移の実装
+	// =========================
+	if (behaviorRequest_ != Behavior::kUnknown) {
+		// 振る舞いを変更する
+		behavior_ = behaviorRequest_;
+		// 各振る舞いごとの初期化を実行
+		switch (behavior_) {
 
-	// 回転アニメーション
-	float param = std::sin(std::numbers::pi_v<float> * 2.0f * walkTimer_ / kWalkMotionTime);
-	float degree = kWalkMotionAngleStart + kWalkMotionAngleEnd * (param + 1.0f) / 2.0f;
-	worldTransform_.rotation_.x = PI/180*(degree);
+		// 通常行動
+		case Behavior::kDeath:
+		default:
+			counter_ = 0;
+			break;
+		}
+		// 振る舞いリクエストを初期化
+		behaviorRequest_ = Behavior::kUnknown;
+	}
 
 
-	// ワールド行列更新
-	WorldTransformUpdate(worldTransform_);
+	switch (behavior_) {
+	case Behavior::kRoot:
+
+		// 移動
+		worldTransform_.translation_ += velocity_;
+
+		// タイマー加算
+		walkTimer_ += 1.0f / 60.0f;
+
+		// 回転アニメーション
+		worldTransform_.rotation_.x = std::sin(std::numbers::pi_v<float> * 2.0f * walkTimer_ / kWalkMotionTime); // ワールド行列更新
+		WorldTransformUpdate(worldTransform_);
+		break;
+
+		// デス演出
+	case Behavior::kDeath:
+		// デス演出のカウンターを進める
+		counter_ += 1.0f / 60.0f;
+
+		worldTransform_.rotation_.y += 0.3f;
+		worldTransform_.rotation_.x = EaseOut(ToRadians(kDefeatedMotionAngleStart), ToRadians(kDefeatedMotionAngleEnd), counter_ / kDefeatedTime);
+
+		// ワールド行列更新
+		WorldTransformUpdate(worldTransform_);
+
+		if (counter_ >= kDefeatedTime) {
+			isDeath_ = true;
+		}
+
+		break;
+	}
+
 }
 void Enemy::Draw()
 {
@@ -66,8 +106,23 @@ AABB Enemy::GetAABB() {
 }
 
 void Enemy::OnCollision(const Player* player) { 
-	(void)player;
 
 	// デスフラグを立てる
-	isDeath_ = true;
+	//isDeath_ = true;
+	if (behavior_ == Behavior::kDeath) {
+		// 敵がやられているなら何もしない
+		return;
+	}
+	// プレイヤーが攻撃中なら敵が死ぬ
+	if (player->IsAttack()) {
+		// デス演出に切り替え
+		behaviorRequest_ = Behavior::kDeath;
+
+		// 衝突無効化
+		isCollisionDisabled_ = true;
+	} 
+
+
+
 }
+

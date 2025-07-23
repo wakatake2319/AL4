@@ -29,6 +29,10 @@ public:
 	// デスしたかどうか
 	bool isDeath() const { return isDeath_; }
 
+	// 衝突無効化
+	bool IsCollisionDisabled() const { return isCollisionDisabled_; }
+
+
 	// ビヘイビア
 	enum class Behavior {
 		// 未定義
@@ -72,4 +76,16 @@ private:
 	// デスフラグ
 	bool isDeath_ = false;
 
+	Behavior behavior_ = Behavior::kRoot;
+	Behavior behaviorRequest_ = Behavior::kUnknown;
+
+	static inline const float kDefeatedTime = 0.6f;
+	static inline const float kDefeatedMotionAngleStart = 0.0f;
+	static inline const float kDefeatedMotionAngleEnd = -60.0f;
+	float counter_ = 0.0f; // カウンター
+
+	// 衝突判定無効化
+	bool isCollisionDisabled_ = false;
+
+	
 };

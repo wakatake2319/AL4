@@ -375,16 +375,22 @@ void GameScene::CheckAllCollisions() {
 
 		// 自キャラと敵弾全ての当たり判定
 		for (Enemy* enemy : enemies_) {
-			// 敵弾の座標
-			aabb2 = enemy->GetAABB();
 
-			// AABB同士の交差判定
-			if (IsCollision(aabb1, aabb2)) {
-				// 自キャラの衝突時コールバックを呼び出す
-				player_->OnCollision(enemy);
-				// 敵弾の衝突時コールバックを呼び出す
-				enemy->OnCollision(player_);
-			}
+			if (enemy->IsCollisionDisabled()) 
+				// 衝突判定を行わない
+				continue;
+
+				// 敵弾の座標
+				aabb2 = enemy->GetAABB();
+
+				// AABB同士の交差判定
+				if (IsCollision(aabb1, aabb2)) {
+					// 自キャラの衝突時コールバックを呼び出す
+					player_->OnCollision(enemy);
+					// 敵弾の衝突時コールバックを呼び出す
+					enemy->OnCollision(player_);
+				}
+			
 		}
 	}
 #pragma endregion
