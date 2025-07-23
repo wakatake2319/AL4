@@ -31,6 +31,7 @@ GameScene::~GameScene() {
 	}
 	delete deathParticles_;
 	delete deathParticle_model_;
+	delete hitEffect_;
 }
 
 // 初期化
@@ -99,6 +100,13 @@ void GameScene::Initialize() {
 	fade_->Initialize();
 	fade_->Start(Fade::Status::FadeIn, 1.0f);
 	
+
+	// ヒットエフェクト
+	hitEffect_ = new HitEffect;
+	HitEffect::SetModel(Model::CreateFromOBJ("hiteffect"));
+	HitEffect::SetCamera(&camera_);
+
+
 }
 
 
