@@ -1,7 +1,9 @@
 #include "Enemy.h"
 #include <numbers>
+#include <cassert>
 #include "Math.h"
 #include "Player.h"
+#include "GameScene.h"
 
 void Enemy::Initialize(Model* model, Camera* camera, const Vector3& position) {
 	assert(model);
@@ -116,6 +118,17 @@ void Enemy::OnCollision(const Player* player) {
 	// プレイヤーが攻撃中なら敵が死ぬ
 	if (player->IsAttack()) {
 		// デス演出に切り替え
+		if (gameScene_) {
+
+			Vector3 pos = player->GetWorldPosition();
+			// 敵と自機の中間位置にエフェクト生成
+			Vector3 effectPos;
+			effectPos.x = (GetWorldPosition() + pos ).x / 2.0f;
+			effectPos.y = (GetWorldPosition() + pos ).y / 2.0f;
+			effectPos.z = (GetWorldPosition() + pos ).z / 2.0f;
+
+			gameScene_->CreateEffect(effectPos);
+		}
 		behaviorRequest_ = Behavior::kDeath;
 
 		// 衝突無効化

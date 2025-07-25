@@ -74,7 +74,7 @@ public:
 	void SetMapChipField(MapChipField* mapchipField) { mapchipField_ = mapchipField; }
 
 		// ワールド座標を取得
-	Vector3 GetWorldPosition();
+	Vector3 GetWorldPosition() const;
 
 	// AABB取得関数
 	AABB GetAABB();

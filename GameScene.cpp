@@ -15,6 +15,14 @@ Matrix4x4 Multiply(const Matrix4x4& m1, const Matrix4x4& m2) {
 	return result;
 }
 
+// エフェクトを生成
+void GameScene::CreateEffect(const Vector3& position) {
+
+	HitEffect* newHitEffect = HitEffect::Create(position);
+
+	hitEffects_.push_back(newHitEffect);
+}
+
 GameScene::~GameScene() {
 	for (std::vector<WorldTransform*>& worldTransformBlockLine : worldTransformBlocks_) {
 		for (WorldTransform* worldTransformBlock : worldTransformBlockLine) {
@@ -31,7 +39,9 @@ GameScene::~GameScene() {
 	}
 	delete deathParticles_;
 	delete deathParticle_model_;
-	delete hitEffect_;
+	for (HitEffect* hitEffect : hitEffects_) {
+		delete hitEffect;
+	}
 }
 
 // 初期化
@@ -90,6 +100,7 @@ void GameScene::Initialize() {
 
 	// モデル読み込み
 	deathParticle_model_ = Model::CreateFromOBJ("deathParticle");
+	particle_model_ = Model::CreateFromOBJ("particle");
 
 
 	// ゲームプレイフェーズから開始
@@ -102,8 +113,7 @@ void GameScene::Initialize() {
 	
 
 	// ヒットエフェクト
-	hitEffect_ = new HitEffect;
-	HitEffect::SetModel(Model::CreateFromOBJ("hiteffect"));
+	HitEffect::SetModel(particle_model_);
 	HitEffect::SetCamera(&camera_);
 
 
@@ -160,6 +170,16 @@ void GameScene::GenerateBlocks() {
 // 更新
 void GameScene::Update() {
 
+	// デスフラグの立ったエフェクトを削除
+	hitEffects_.remove_if([](HitEffect* hitEffect) {
+		if (hitEffect->IsDead()) {
+			delete hitEffect;
+
+			return true;
+		}
+		return false;
+	});
+
 	enemies_.remove_if ([](Enemy* enemy) {
 		if (enemy->isDeath()) {
 			delete enemy;
@@ -196,6 +216,10 @@ void GameScene::Update() {
 			enemy->Update();
 		}
 
+		for (HitEffect* hitEffect : hitEffects_) {
+			hitEffect->Update();
+		}
+
 		// カメラコントローラーの更新
 		cameraController_->Update();
 
@@ -222,6 +246,9 @@ void GameScene::Update() {
 				// アフィン変換~DirectXに転送
 				WorldTransformUpdate(*worldTransformBlock);
 			}
+		}
+		for (HitEffect* hitEffect : hitEffects_) {
+			hitEffect->Update();
 		}
 		break;
 
@@ -278,7 +305,9 @@ void GameScene::Update() {
 
 		// 全ての当たり判定
 		CheckAllCollisions();
-
+		for (HitEffect* hitEffect : hitEffects_) {
+			hitEffect->Update();
+		}
 		break;
 
 	case Phase::kDeath:
@@ -303,6 +332,10 @@ void GameScene::Update() {
 			deathParticles_->Update();
 		}
 
+		for (HitEffect* hitEffect : hitEffects_) {
+			hitEffect->Update();
+		}
+
 		break;
 
 	case Phase::kFadeOut:
@@ -323,6 +356,10 @@ void GameScene::Update() {
 		// 敵の更新
 		for (Enemy* enemy : enemies_) {
 			enemy->Update();
+		}
+
+		for (HitEffect* hitEffect : hitEffects_) {
+			hitEffect->Update();
 		}
 
 		break;
@@ -365,6 +402,10 @@ void GameScene::Draw() {
 	// デスパーティクル描画
 	if (deathParticles_) {
 		deathParticles_->Draw();
+	}
+
+	for (HitEffect* hitEffect : hitEffects_) {
+		hitEffect->Draw();
 	}
 
 	Model::PostDraw();

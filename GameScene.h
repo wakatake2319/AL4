@@ -33,6 +33,8 @@ public:
 
 	bool IsFinished() const { return finished_; }
 
+	void CreateEffect(const Vector3& position);
+
 private:
 	// ゲームのフェーズ
 	enum class Phase 
@@ -97,6 +99,8 @@ private:
 	Fade* fade_ = nullptr;
 	
 	// ヒットエフェクト
-	HitEffect* hitEffect_ = nullptr;
+	std::list<HitEffect*> hitEffects_;
+	Model* particle_model_ = nullptr;
+
 
 };

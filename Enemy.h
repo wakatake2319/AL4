@@ -1,9 +1,11 @@
 #pragma once
 #include "KamataEngine.h"
 #include "Math.h"
+#include "Player.h"
 using namespace KamataEngine;
 
 class Player;
+class GameScene;
 
 class Enemy {
 
@@ -32,6 +34,7 @@ public:
 	// 衝突無効化
 	bool IsCollisionDisabled() const { return isCollisionDisabled_; }
 
+	void SetGameScene(GameScene* gameScene) { gameScene_ = gameScene; }
 
 	// ビヘイビア
 	enum class Behavior {
@@ -87,5 +90,5 @@ private:
 	// 衝突判定無効化
 	bool isCollisionDisabled_ = false;
 
-	
+	GameScene* gameScene_ = nullptr;
 };
