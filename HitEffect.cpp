@@ -27,8 +27,18 @@ void HitEffect::Initialize(const KamataEngine::Vector3& position) {
 	randomEngine.seed(seedGenerator());
 	std::uniform_real_distribution<float> rotationDistribution(-std::numbers::pi_v<float>, std::numbers::pi_v<float>);
 
+	// 楕円エフェクト
+	for (WorldTransform& worldTransform : ellipseWorldTransforms_) {
+		worldTransform.scale_ = {0.0f, 0.0f, 1.0f};
+		worldTransform.rotation_.y = rotationDistribution(randomEngine);
+		worldTransform.Initialize();
+		worldTransform.translation_.z = -1.0f;
+	}
+
+
 	// 円形エフェクト
 	circleWorldTransform_.translation_ = position;
+	circleWorldTransform_.scale_ = {1.0f, 1.0f, 1.0f};
 	circleWorldTransform_.Initialize();
 	circleWorldTransform_.translation_.z = -1.0f;
 	objectColor_.Initialize();
@@ -48,4 +58,5 @@ void HitEffect::Draw() {
 	assert(camera_);
 
 	model_->Draw(circleWorldTransform_, *camera_, &objectColor_);
+	OutputDebugStringA("Draw!\n");
 }

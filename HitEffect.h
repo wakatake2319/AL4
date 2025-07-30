@@ -48,6 +48,12 @@ private:
 	// カメラ（借りてくる用）
 	static Camera* camera_;
 
+	// 楕円エフェクトの数
+	static const inline uint32_t kellipseEffectNum = 2;
+
+	// 楕円のワールドトランスフォーム
+	std::array<WorldTransform, kellipseEffectNum> ellipseWorldTransforms_;
+
 	// 円のワールドトランスフォーム
 	WorldTransform circleWorldTransform_;
 

@@ -265,6 +265,10 @@ void GameScene::Update() {
 		// 敵の更新
 		for (Enemy* enemy : enemies_) {
 			enemy->Update();
+			if (enemy->isDeath()) {
+				// エネミーがデスしたらヒットエフェクトを生成
+				CreateEffect(enemy->GetWorldPosition());
+			}
 		}
 
 		// カメラコントローラーの更新
@@ -409,6 +413,12 @@ void GameScene::Draw() {
 	}
 
 	Model::PostDraw();
+
+	// スプライト描画前処理
+	Sprite::PreDraw(dxCommon->GetCommandList());
+
+	// スプライト描画後処理
+	Sprite::PostDraw();
 
 	fade_->Draw();
 }

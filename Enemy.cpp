@@ -118,6 +118,7 @@ void Enemy::OnCollision(const Player* player) {
 	// プレイヤーが攻撃中なら敵が死ぬ
 	if (player->IsAttack()) {
 		// デス演出に切り替え
+		behaviorRequest_ = Behavior::kDeath;
 		if (gameScene_) {
 
 			Vector3 pos = player->GetWorldPosition();
@@ -129,7 +130,7 @@ void Enemy::OnCollision(const Player* player) {
 
 			gameScene_->CreateEffect(effectPos);
 		}
-		behaviorRequest_ = Behavior::kDeath;
+		
 
 		// 衝突無効化
 		isCollisionDisabled_ = true;

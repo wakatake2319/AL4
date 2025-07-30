@@ -99,6 +99,7 @@ public:
 	// 攻撃しているかどうか
 	bool IsAttack() const { return behavior_ == Behavior::kAttack && attackPhase_ == AttackPhase::kAction; }
 
+	bool IsCollisionDisabled() const { return isCollisionDisabled_; }
 
 private:
 	// ワールド変換データ
@@ -239,4 +240,6 @@ private:
 	Model* modelAttack_ = nullptr;
 	WorldTransform worldTransformAttack_;
 
+	// 衝突無効化
+	bool isCollisionDisabled_ = false;
 };
