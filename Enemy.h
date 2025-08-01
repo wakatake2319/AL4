@@ -31,6 +31,8 @@ public:
 	// デスしたかどうか
 	bool isDeath() const { return isDeath_; }
 
+
+
 	// 衝突無効化
 	bool IsCollisionDisabled() const { return isCollisionDisabled_; }
 
@@ -78,6 +80,8 @@ private:
 
 	// デスフラグ
 	bool isDeath_ = false;
+
+
 
 	Behavior behavior_ = Behavior::kRoot;
 	Behavior behaviorRequest_ = Behavior::kUnknown;

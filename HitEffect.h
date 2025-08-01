@@ -41,6 +41,14 @@ private:
 	// 初期化
 	void Initialize(const Vector3& position);
 
+	// 拡大アニメーションの時間
+	static inline const uint32_t kSpreadTime = 10;
+
+	// フェードアウトアニメーションの時間
+	static inline const uint32_t kFadeTime = 20;
+
+	// エフェクトの寿命
+	static inline const uint32_t kLifetime = kSpreadTime + kFadeTime;
 
 	// モデル（借りてくる用）
 	static Model* model_;
@@ -58,6 +66,10 @@ private:
 	WorldTransform circleWorldTransform_;
 
 	State state_ = State::kSpread;
+
+	// カウンター
+	uint32_t counter_ = 0;
+
 
 	ObjectColor objectColor_;
 };
