@@ -110,10 +110,14 @@ private:
 	// ================================
 	// 移動
 	// ================================
-	// 慣性移動
+	// 地上慣性移動
 	static inline const float kAcceleration = 0.01f;
-	// 減速
-	static inline const float kAtteleration = 0.05f;
+	// 地上減速
+	static inline const float kAtteleration = 0.05f; 
+	// 空中慣性移動
+	static inline const float kAccelerationOnSky = 0.008f;
+	// 空中減速
+	static inline const float kAttelerationOnsky = 0.06f;
 	// 最大速度
 	static inline const float kLimitRunSpeed = 0.3f;
 

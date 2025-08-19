@@ -130,6 +130,7 @@ void Player::BehaviorAttackInitialize() {
 	attackPhase_ = AttackPhase::kAnticipation;
 }
 
+// 攻撃時動作
 void Player::BehaviorAttackUpdate() {
 
 	// 攻撃時に起こる移動
@@ -318,6 +319,65 @@ void Player::InputMove() {
 		// 空中にいる時
 		// ========================
 
+		if (Input::GetInstance()->PushKey(DIK_RIGHT) || Input::GetInstance()->PushKey(DIK_LEFT)) {
+
+			// 左右加速
+			Vector3 acceleration = {};
+			if (Input::GetInstance()->PushKey(DIK_RIGHT)) {
+				// 左移動中の右入力
+				if (velocity_.x < 0.0f) {
+					// 速度と逆方向に入力中は急ブレーキ
+					velocity_.x *= (1.0f - kAttelerationOnsky);
+				}
+
+				// 移動
+				acceleration.x += kAccelerationOnSky;
+
+				// 左右状態切り替え
+				if (lrDirection_ != LRDirection::kRight) {
+					lrDirection_ = LRDirection::kRight;
+					// 旋回開始時の角度を記録する
+					turnFirstRotationY_ = worldTransform_.rotation_.y;
+					// 旋回タイマーに時間を設定する
+					turnTimer_ = kTimeTurn;
+				}
+
+			} else if (Input::GetInstance()->PushKey(DIK_LEFT)) {
+
+				// 右移動中の左入力
+				if (velocity_.x > 0.0f) {
+					// 速度と逆方向に入力中は急ブレーキ
+					velocity_.x *= (1.0f - kAttelerationOnsky);
+				}
+				// 移動
+				acceleration.x -= kAccelerationOnSky;
+
+				// 左右状態切り替え
+				if (lrDirection_ != LRDirection::kLeft) {
+					lrDirection_ = LRDirection::kLeft;
+					// 旋回開始時の角度を記録する
+					turnFirstRotationY_ = worldTransform_.rotation_.y;
+					// 旋回タイマーに時間を設定する
+					turnTimer_ = kTimeTurn;
+				}
+			}
+
+			// 加速/減速
+			velocity_ += acceleration;
+
+			// 最大速度の制限
+			velocity_.x = std::clamp(velocity_.x, -kLimitRunSpeed, kLimitRunSpeed);
+
+		} else {
+
+			// 移動入力をしてない場合は減衰させる
+			velocity_.x *= (1.0f - kAttelerationOnsky);
+		}
+
+		// =========================
+		// 落下中の制御
+		// =========================
+		
 		// 落下速度
 		velocity_ += Vector3(0.0f, -kGravityAcceleration / 60.0f, 0.0f);
 		// 落下速度の制限
