@@ -120,7 +120,11 @@ private:
 	static inline const float kAttelerationOnsky = 0.06f;
 	// 最大速度
 	static inline const float kLimitRunSpeed = 0.3f;
-
+	// 空中ジャンプができるか
+	bool isAirJump = false;
+	// 空中ジャンプできるまでのラグ
+	static inline const int kAirJumpLag = 10; 	// 空中ジャンプまでのラグタイマー
+	int airJumpLagTimer = 0; 
 
 	// ===============================
 	// 振り向き
@@ -144,8 +148,10 @@ private:
 	static inline const float kGravityAcceleration = 0.98f;
 	// 最大落下速度(下方向)
 	static inline const float kLimitFallSpeed = 0.5f;
-	// ジャンプ初速(上方向)
+	// 地上ジャンプ初速(上方向)
 	static inline const float kJumpAcceleration = 20.0f;
+	// 空中ジャンプ初速(上方向)
+	static inline const float kAirJumpAcceleration = 10.0f;
 
 	// ================================
 	// プレイヤーの当たり判定
@@ -229,6 +235,9 @@ private:
 	static inline const uint32_t kActionTime = 5;
 	// 余韻動作の時間
 	static inline const uint32_t kRecoveryTime = 12;
+	// 攻撃のクールタイム　保留
+	//static inline const int kAttackCoolTime = 30;
+	//int attackCoolTime = 0;
 
 
 
