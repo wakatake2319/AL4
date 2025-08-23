@@ -31,6 +31,7 @@ GameScene::~GameScene() {
 	}
 	delete deathParticles_;
 	delete deathParticle_model_;
+	delete key_;
 }
 
 // 初期化
@@ -94,6 +95,12 @@ void GameScene::Initialize() {
 	// モデル読み込み
 	deathParticle_model_ = Model::CreateFromOBJ("deathParticle");
 
+	key_ = new Key();
+	// 鍵のモデル
+	key_model_ = Model::CreateFromOBJ("key");
+	Vector3 keyPosition = mapChipField_->GetMapChipPositionByIndex(10, 18);
+	key_->Initialize(key_model_, &camera_, keyPosition);
+
 
 	// ゲームプレイフェーズから開始
 	phase_ = Phase::kFadeIn;
@@ -156,13 +163,14 @@ void GameScene::GenerateBlocks() {
 // 更新
 void GameScene::Update() {
 
-	enemies_.remove_if ([](Enemy* enemy) {
+	enemies_.remove_if([](Enemy* enemy) {
 		if (enemy->isDeath()) {
 			delete enemy;
 			return true; // 削除対象
 		}
 		return false; // 削除対象ではない
-		});
+	});
+
 
 	ChangePhase();
 
@@ -191,6 +199,9 @@ void GameScene::Update() {
 		for (Enemy* enemy : enemies_) {
 			enemy->Update();
 		}
+
+		// 鍵の更新
+		key_->Update();
 
 		// カメラコントローラーの更新
 		cameraController_->Update();
@@ -235,6 +246,10 @@ void GameScene::Update() {
 		for (Enemy* enemy : enemies_) {
 			enemy->Update();
 		}
+
+		// 鍵の更新
+		key_->Update();
+
 
 		// カメラコントローラーの更新
 		cameraController_->Update();
@@ -294,6 +309,10 @@ void GameScene::Update() {
 			enemy->Update();
 		}
 
+		// 鍵の更新
+		key_->Update();
+
+
 		// デスパーティクルの更新
 		if (deathParticles_) {
 			deathParticles_->Update();
@@ -320,6 +339,10 @@ void GameScene::Update() {
 		for (Enemy* enemy : enemies_) {
 			enemy->Update();
 		}
+
+		// 鍵の更新
+		key_->Update();
+
 
 		break;
 	}
@@ -348,6 +371,10 @@ void GameScene::Draw() {
 	for (Enemy* enemy : enemies_) {
 		enemy->Draw();
 	}
+
+	// 鍵の描画
+	key_->Draw();
+
 
 	// ブロック描画
 	for (std::vector<WorldTransform*>& worldTransformBlockLine : worldTransformBlocks_) {
@@ -380,22 +407,23 @@ void GameScene::CheckAllCollisions() {
 		// 自キャラと敵弾全ての当たり判定
 		for (Enemy* enemy : enemies_) {
 
-			if (enemy->IsCollisionDisabled()) 
+			if (enemy->IsCollisionDisabled())
 				// 衝突判定を行わない
 				continue;
 
-				// 敵弾の座標
-				aabb2 = enemy->GetAABB();
+			// 敵弾の座標
+			aabb2 = enemy->GetAABB();
 
-				// AABB同士の交差判定
-				if (IsCollision(aabb1, aabb2)) {
-					// 自キャラの衝突時コールバックを呼び出す
-					player_->OnCollision(enemy);
-					// 敵弾の衝突時コールバックを呼び出す
-					enemy->OnCollision(player_);
-				}
-			
+			// AABB同士の交差判定
+			if (IsCollision(aabb1, aabb2)) {
+				// 自キャラの衝突時コールバックを呼び出す
+				player_->OnCollision(enemy);
+				// 敵弾の衝突時コールバックを呼び出す
+				enemy->OnCollision(player_);
+			}
 		}
+
+
 	}
 #pragma endregion
 }

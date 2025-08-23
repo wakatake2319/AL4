@@ -7,6 +7,8 @@
 #include "Enemy.h"
 #include "DeatParticles.h"
 #include "Fade.h"
+#include "Key.h"
+#include <filesystem>
 
 using namespace KamataEngine;
 
@@ -79,6 +81,11 @@ private:
 	Model* enemy_model_ = nullptr;
 	// 敵の複数化
 	std::list<Enemy*> enemies_;
+
+	// 鍵
+	Key* key_ = nullptr;
+	Model* key_model_ = nullptr;
+
 
 	// デスパーティクル
 	DeathParticles* deathParticles_ = nullptr;
