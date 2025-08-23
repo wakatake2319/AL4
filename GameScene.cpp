@@ -70,7 +70,11 @@ void GameScene::Initialize() {
 	cameraController_->Reset();
 
 	// カメラコントローラーの移動範囲の指定
-	CameraController::Rect cameraArea = {12.0f, 100 - 12.0f, 6.0f, 20 - 6.0f};
+	CameraController::Rect cameraArea = { 
+		12.0f, 
+		MapChipField::GetNumBlockHorizontal() * MapChipField::kBlockWidth - 12.0f,
+		6.0f, 
+		MapChipField::GetNumBlockVirtical() * MapChipField::kBlockHeight - 7.0f};
 	cameraController_->SetMovableArea(cameraArea);
 
 	// 敵モデル
