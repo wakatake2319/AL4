@@ -49,7 +49,7 @@ void Key::Update() {
 		rotateTimer_ += 1.0f / 60.0f;
 
 		// 回転アニメーション
-		worldTransform_.rotation_.y = std::sin(std::numbers::pi_v<float> * 1.0f * rotateTimer_ / kRotateMotionTime); // ワールド行列更新
+		worldTransform_.translation_.y = std::sin(std::numbers::pi_v<float> * 1.0f * rotateTimer_ / kRotateMotionTime); // ワールド行列更新
 		WorldTransformUpdate(worldTransform_);
 		break;
 
