@@ -114,7 +114,7 @@ void Player::BehaviorRootUpdate() {
 
 	//WorldTransformUpdate(worldTransform_);
 
-	if (Input::GetInstance()->PushKey(DIK_A)) {
+	if (Input::GetInstance()->PushKey(DIK_DOWN) || Input::GetInstance()->PushKey(DIK_S)) {
 		// 攻撃ビヘイビアをリクエスト
 		behaviorRequest_ = Behavior::kAttack;
 	}
@@ -251,11 +251,11 @@ void Player::InputMove() {
 		// =========================
 		// 移動入力
 		// =========================
-		if (Input::GetInstance()->PushKey(DIK_RIGHT) || Input::GetInstance()->PushKey(DIK_LEFT)) {
+		if (Input::GetInstance()->PushKey(DIK_RIGHT) || Input::GetInstance()->PushKey(DIK_LEFT) || Input::GetInstance()->PushKey(DIK_D) || Input::GetInstance()->PushKey(DIK_A)) {
 
 			// 左右加速
 			Vector3 acceleration = {};
-			if (Input::GetInstance()->PushKey(DIK_RIGHT)) {
+			if (Input::GetInstance()->PushKey(DIK_RIGHT) || Input::GetInstance()->PushKey(DIK_D)) {
 				// 左移動中の右入力
 				if (velocity_.x < 0.0f) {
 					// 速度と逆方向に入力中は急ブレーキ
@@ -274,7 +274,7 @@ void Player::InputMove() {
 					turnTimer_ = kTimeTurn;
 				}
 
-			} else if (Input::GetInstance()->PushKey(DIK_LEFT)) {
+			} else if (Input::GetInstance()->PushKey(DIK_LEFT) || Input::GetInstance()->PushKey(DIK_A)) {
 
 				// 右移動中の左入力
 				if (velocity_.x > 0.0f) {
@@ -309,7 +309,7 @@ void Player::InputMove() {
 		// =========================
 		// ジャンプ入力　地上時
 		// =========================
-		if (Input::GetInstance()->PushKey(DIK_UP) && onGround_) {
+		if (Input::GetInstance()->PushKey(DIK_UP) || Input::GetInstance()->PushKey(DIK_W) && onGround_) {
 			// ジャンプ初速
 			velocity_ += Vector3(0.0f, kJumpAcceleration / 60.0f, 0.0f);
 
@@ -325,11 +325,11 @@ void Player::InputMove() {
 		// 空中にいる時
 		// ========================
 
-		if (Input::GetInstance()->PushKey(DIK_RIGHT) || Input::GetInstance()->PushKey(DIK_LEFT)) {
+		if (Input::GetInstance()->PushKey(DIK_RIGHT) || Input::GetInstance()->PushKey(DIK_LEFT) || Input::GetInstance()->PushKey(DIK_D) || Input::GetInstance()->PushKey(DIK_A)) {
 
 			// 左右加速
 			Vector3 acceleration = {};
-			if (Input::GetInstance()->PushKey(DIK_RIGHT)) {
+			if (Input::GetInstance()->PushKey(DIK_RIGHT) || Input::GetInstance()->PushKey(DIK_D)) {
 				// 左移動中の右入力
 				if (velocity_.x < 0.0f) {
 					// 速度と逆方向に入力中は急ブレーキ
@@ -348,7 +348,7 @@ void Player::InputMove() {
 					turnTimer_ = kTimeTurn;
 				}
 
-			} else if (Input::GetInstance()->PushKey(DIK_LEFT)) {
+			} else if (Input::GetInstance()->PushKey(DIK_LEFT) || Input::GetInstance()->PushKey(DIK_A)) {
 
 				// 右移動中の左入力
 				if (velocity_.x > 0.0f) {
@@ -383,7 +383,7 @@ void Player::InputMove() {
 		// =========================
 		// ジャンプ入力　空中時
 		// =========================
-		if (Input::GetInstance()->TriggerKey(DIK_UP) && !onGround_) {
+		if (Input::GetInstance()->TriggerKey(DIK_UP) || Input::GetInstance()->PushKey(DIK_W) && !onGround_) {
 			if (isAirJump && airJumpLagTimer <= 0) {
 				// ジャンプ初速
 				velocity_ += Vector3(0.0f, kAirJumpAcceleration / 60.0f, 0.0f);

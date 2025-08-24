@@ -102,16 +102,7 @@ void Key::OnCollision(const Player* player) {
 
 	// 取るフラグを立てる
 	// isGet_ = true;
-	if (behavior_ == Behavior::kGet) {
-		// 敵がやられているなら何もしない
-		return;
-	}
-	// プレイヤーが攻撃中なら敵が死ぬ
-	if (player->IsAttack()) {
-		// 取る演出に切り替え
-		behaviorRequest_ = Behavior::kGet;
-
-		// 衝突無効化
-		isCollisionDisabled_ = true;
-	}
+	(void)player;
+	// デスフラグを立てる
+	isGet_ = true;
 }

@@ -98,7 +98,7 @@ void GameScene::Initialize() {
 	key_ = new Key();
 	// 鍵のモデル
 	key_model_ = Model::CreateFromOBJ("key");
-	Vector3 keyPosition = mapChipField_->GetMapChipPositionByIndex(10, 18);
+	Vector3 keyPosition = mapChipField_->GetMapChipPositionByIndex(6, 18);
 	key_->Initialize(key_model_, &camera_, keyPosition);
 
 
@@ -423,6 +423,18 @@ void GameScene::CheckAllCollisions() {
 			}
 		}
 
+		// ==============================
+		// 自キャラと鍵の当たり判定
+		// ==============================
+		{
+			aabb1 = player_->GetAABB();
+			aabb2 = key_->GetAABB();
+
+			if (IsCollision(aabb1, aabb2)) {
+
+				key_->OnCollision(player_);
+			}
+		}
 
 	}
 #pragma endregion
