@@ -98,7 +98,7 @@ void GameScene::Initialize() {
 	key_ = new Key();
 	// 鍵のモデル
 	key_model_ = Model::CreateFromOBJ("key");
-	Vector3 keyPosition = mapChipField_->GetMapChipPositionByIndex(6, 18);
+	Vector3 keyPosition = mapChipField_->GetMapChipPositionByIndex(6, 30);
 	key_->Initialize(key_model_, &camera_, keyPosition);
 
 
@@ -417,7 +417,7 @@ void GameScene::CheckAllCollisions() {
 			// AABB同士の交差判定
 			if (IsCollision(aabb1, aabb2)) {
 				// 自キャラの衝突時コールバックを呼び出す
-				player_->OnCollision(enemy);
+				player_->OnCollisionEnemy(enemy);
 				// 敵弾の衝突時コールバックを呼び出す
 				enemy->OnCollision(player_);
 			}
@@ -432,6 +432,7 @@ void GameScene::CheckAllCollisions() {
 
 			if (IsCollision(aabb1, aabb2)) {
 
+				player_->OnCollisionKey(key_);
 				key_->OnCollision(player_);
 			}
 		}

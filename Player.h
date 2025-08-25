@@ -7,6 +7,7 @@ using namespace KamataEngine;
 // 前方宣言
 class MapChipField;
 class Enemy;
+class Key;
 
 
 
@@ -79,10 +80,15 @@ public:
 	// AABB取得関数
 	AABB GetAABB();
 
-	void OnCollision(const Enemy* enemy);
+	void OnCollisionEnemy(const Enemy* enemy);
+
+	void OnCollisionKey(const Key* key);
 
 	// デスフラグのgetter
 	bool IsDeath() const { return isDeath_; }
+
+	// ゲットフラグのgetter
+	bool IsGet() const { return isGet_; }
 
 	// 通常行動更新
 	void BehaviorRootUpdate();
@@ -210,6 +216,9 @@ private:
 
 	// デスフラグ
 	bool isDeath_ = false;
+
+	// ゲットフラグ
+	bool isGet_ = false;
 
 	// ================================
 	// Behaviorの定義

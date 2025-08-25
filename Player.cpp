@@ -768,7 +768,7 @@ AABB Player::GetAABB() {
 }
 
 // 敵との衝突処理
-void Player::OnCollision(const Enemy* enemy) { 
+void Player::OnCollisionEnemy(const Enemy* enemy) { 
 	(void)enemy;
 
 	if (IsAttack()) {
@@ -776,4 +776,10 @@ void Player::OnCollision(const Enemy* enemy) {
 	}
 	// デスフラグを立てる
 	isDeath_ = true;
+}
+
+void Player::OnCollisionKey(const Key* key) {
+	(void)key;
+	// キーフラグを立てる
+	isGet_ = true;
 }
