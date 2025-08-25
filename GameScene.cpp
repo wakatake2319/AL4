@@ -373,7 +373,10 @@ void GameScene::Draw() {
 	}
 
 	// 鍵の描画
-	key_->Draw();
+	if (!key_->isGet()) {
+		key_->Draw();
+	}
+
 
 
 	// ブロック描画

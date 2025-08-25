@@ -125,7 +125,7 @@ private:
 	// 空中減速
 	static inline const float kAttelerationOnsky = 0.06f;
 	// 最大速度
-	static inline const float kLimitRunSpeed = 0.3f;
+	static inline const float kLimitRunSpeed = 0.35f;
 	// 空中ジャンプができるか
 	bool isAirJump = false;
 	// 空中ジャンプできるまでのラグ
