@@ -11,6 +11,7 @@ void Key::Initialize(Model* model, Camera* camera, const Vector3& position) {
 	// ワールド変換の初期化
 	worldTransform_.Initialize();
 	worldTransform_.translation_ = position;
+	basePosition_ = position; // 基準位置を保存
 
 	// 初期回転
 	worldTransform_.rotation_.y = std::numbers::pi_v<float> * 3.0f / 2.0f;
@@ -48,8 +49,9 @@ void Key::Update() {
 		// タイマー加算
 		rotateTimer_ += 1.0f / 60.0f;
 
+		worldTransform_.rotation_.y += 0.02f; 
+
 		// 回転アニメーション
-		worldTransform_.translation_.y = std::sin(std::numbers::pi_v<float> * 1.0f * rotateTimer_ / kRotateMotionTime); // ワールド行列更新
 		WorldTransformUpdate(worldTransform_);
 		break;
 
@@ -59,7 +61,7 @@ void Key::Update() {
 		counter_ += 1.0f / 60.0f;
 
 		worldTransform_.rotation_.y += 0.3f;
-		worldTransform_.rotation_.x = EaseOut(ToRadians(kDefeatedMotionAngleStart), ToRadians(kDefeatedMotionAngleEnd), counter_ / kDefeatedTime);
+		worldTransform_.translation_.y += 0.1f;
 
 		// ワールド行列更新
 		WorldTransformUpdate(worldTransform_);
@@ -104,5 +106,5 @@ void Key::OnCollision(const Player* player) {
 	// isGet_ = true;
 	(void)player;
 	// デスフラグを立てる
-	isGet_ = true;
+	behaviorRequest_ = Behavior::kGet;
 }

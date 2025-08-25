@@ -98,7 +98,7 @@ void GameScene::Initialize() {
 	key_ = new Key();
 	// 鍵のモデル
 	key_model_ = Model::CreateFromOBJ("key");
-	Vector3 keyPosition = mapChipField_->GetMapChipPositionByIndex(6, 30);
+	Vector3 keyPosition = mapChipField_->GetMapChipPositionByIndex(3, 16);
 	key_->Initialize(key_model_, &camera_, keyPosition);
 
 

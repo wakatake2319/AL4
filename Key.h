@@ -84,4 +84,7 @@ private:
 
 	// 衝突判定無効化
 	bool isCollisionDisabled_ = false;
+
+	// 基準位置
+	Vector3 basePosition_;
 };
