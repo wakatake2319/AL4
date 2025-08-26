@@ -47,26 +47,16 @@ void ChangScene() {
 	case Scene::kGame:
 		if (gameScene->IsFinished()) {
 
-			if (gameScene->GetResult() == GameScene::Result::kDead) {
 				// 死亡 → タイトルへ戻る
 				scene = Scene::kTitle;
 				delete gameScene;
 				gameScene = nullptr;
 				titleScene = new TitleScene();
 				titleScene->Initialize();
-			}
+			
 
 
-			// シーン変更
-			scene = Scene::kClear;
 
-			// 旧シーンの開放
-			delete gameScene;
-			gameScene = nullptr;
-
-			// 新シーンの生成と初期化
-			clearScene = new ClearScene();
-			clearScene->Initialize();
 		}
 		break;	
 	case Scene::kClear:
