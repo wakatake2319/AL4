@@ -34,6 +34,14 @@ public:
 
 	bool IsFinished() const { return finished_; }
 
+	enum class Result {
+		kNone,
+		kClear,
+		kDead,
+	};
+
+	Result GetResult() const { return result_; }
+
 private:
 	// ゲームのフェーズ
 	enum class Phase 
@@ -41,6 +49,7 @@ private:
 		kFadeIn, // フェードイン
 		kplay,// ゲームプレイ
 		kDeath,// デス演出
+		kClear,   // クリア演出
 		kFadeOut, // フェードアウト
 	};
 
@@ -100,4 +109,6 @@ private:
 	bool finished_ = false;
 
 	Fade* fade_ = nullptr;
+
+	Result result_ = Result::kNone;
 };

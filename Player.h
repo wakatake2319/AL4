@@ -87,6 +87,8 @@ public:
 	// デスフラグのgetter
 	bool IsDeath() const { return isDeath_; }
 
+	void SetIsGet(bool isGet) { isGet_ = isGet; }
+
 	// ゲットフラグのgetter
 	bool IsGet() const { return isGet_; }
 

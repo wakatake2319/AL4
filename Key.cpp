@@ -101,10 +101,11 @@ AABB Key::GetAABB() {
 }
 
 void Key::OnCollision(const Player* player) {
-
-	// 取るフラグを立てる
-	// isGet_ = true;
-	(void)player;
-	// デスフラグを立てる
-	behaviorRequest_ = Behavior::kGet;
+	if (behavior_ == Behavior::kGet)
+		return;
+		behaviorRequest_ = Behavior::kGet;
+		isCollisionDisabled_ = true;
+		// プレイヤーに鍵を渡す
+		const_cast<Player*>(player)->SetIsGet(true);
+	
 }

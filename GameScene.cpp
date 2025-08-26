@@ -203,6 +203,18 @@ void GameScene::Update() {
 		// 鍵の更新
 		key_->Update();
 
+		    // 死亡チェック
+		if (player_->IsDeath()) {
+			finished_ = true;
+			result_ = Result::kDead;
+		}
+
+		// ゴールチェック
+		//if (/* ゴールに到達 && player_->HasKey() */) {
+		//	isFinished_ = true;
+		//	result_ = Result::kClear;
+		//}
+
 		// カメラコントローラーの更新
 		cameraController_->Update();
 
@@ -319,6 +331,26 @@ void GameScene::Update() {
 		}
 
 		break;
+
+	case Phase::kClear:
+		// クリア演出の更新
+		// （ここにクリア演出の処理を追加）
+		// クリア演出が終了したらフェードアウトフェーズへ移行
+		phase_ = Phase::kFadeOut;
+
+		// 天球の更新
+		skydome_->Update();
+
+		// カメラコントローラーの更新
+		cameraController_->Update();
+
+		// 敵の更新
+		for (Enemy* enemy : enemies_) {
+			enemy->Update();
+		}
+
+		break;
+
 
 	case Phase::kFadeOut:
 		// フェードの更新

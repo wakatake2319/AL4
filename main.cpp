@@ -1,5 +1,6 @@
 #include "TitleScene.h"
 #include "GameScene.h"
+#include "ClearScene.h"
 #include "KamataEngine.h"
 #include <Windows.h>
 
@@ -9,6 +10,8 @@ using namespace KamataEngine;
 TitleScene* titleScene = nullptr;
 // ゲームシーン
 GameScene* gameScene = nullptr;
+// ゲームクリアのインスタンス生成
+ClearScene* clearScene = nullptr;
 
 
 // シーン
@@ -16,6 +19,7 @@ enum class Scene {
 	kUnknown = 0,
 	kTitle, // タイトル
 	kGame,  // ゲーム
+	kClear, // クリア
 };
 
 // 現在のシーン
@@ -42,18 +46,40 @@ void ChangScene() {
 		break;
 	case Scene::kGame:
 		if (gameScene->IsFinished()) {
+
+			if (gameScene->GetResult() == GameScene::Result::kDead) {
+				// 死亡 → タイトルへ戻る
+				scene = Scene::kTitle;
+				delete gameScene;
+				gameScene = nullptr;
+				titleScene = new TitleScene();
+				titleScene->Initialize();
+			}
+
+
 			// シーン変更
-			scene = Scene::kTitle;
+			scene = Scene::kClear;
 
 			// 旧シーンの開放
 			delete gameScene;
 			gameScene = nullptr;
 
 			// 新シーンの生成と初期化
+			clearScene = new ClearScene();
+			clearScene->Initialize();
+		}
+		break;	
+	case Scene::kClear:
+		if (clearScene->IsFinished()) {
+			// シーン変更
+			scene = Scene::kTitle;
+			// 旧シーンの開放
+			delete clearScene;
+			clearScene = nullptr;
+			// 新シーンの生成と初期化
 			titleScene = new TitleScene();
 			titleScene->Initialize();
 		}
-		break;
 	}
 }
 
@@ -68,6 +94,9 @@ void UpdateScene() {
 	case Scene::kGame:
 		gameScene->Update();
 		break;
+	case Scene::kClear:
+		clearScene->Update();
+		break;
 	}
 }
 
@@ -81,6 +110,9 @@ void DrawScene() {
 		break;
 	case Scene::kGame:
 		gameScene->Draw();
+		break;
+	case Scene::kClear:
+		clearScene->Draw();
 		break;
 	}
 }
@@ -140,6 +172,8 @@ int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int) {
 	delete titleScene;
 	// ゲームシーンの開放
 	delete gameScene;
+	// クリアシーンの開放
+	delete clearScene;
 	// nullptrの代入
 	//gameScene = nullptr;
 
