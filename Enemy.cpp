@@ -46,11 +46,18 @@ void Enemy::Update()
 	switch (behavior_) {
 	case Behavior::kRoot:
 
+		if (walkTimer_ >= 300.0f) {
+			walkTimer_ = 0.0f;
+			velocity_ *= -1.0f;
+		}
+
 		// 移動
 		worldTransform_.translation_ += velocity_;
 
+
+
 		// タイマー加算
-		walkTimer_ += 1.0f / 60.0f;
+		walkTimer_ ++;
 
 		WorldTransformUpdate(worldTransform_);
 		break;

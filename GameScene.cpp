@@ -74,7 +74,7 @@ void GameScene::Initialize() {
 	CameraController::Rect cameraArea = { 
 		12.0f, 
 		MapChipField::GetNumBlockHorizontal() * MapChipField::kBlockWidth - 12.0f,
-		6.0f, 
+		8.0f, 
 		MapChipField::GetNumBlockVirtical() * MapChipField::kBlockHeight - 7.0f};
 	cameraController_->SetMovableArea(cameraArea);
 
@@ -82,14 +82,23 @@ void GameScene::Initialize() {
 	enemy_model_ = Model::CreateFromOBJ("enemy");
 
 	for (int32_t i = 0; i < 2; ++i) {
-
 		// エネミーの初期化
 		Enemy* newenemy_ = new Enemy;
 		// エネミーの初期位置
-		Vector3 enemyPosition = mapChipField_->GetMapChipPositionByIndex(50 + i * 6, 18);
+		Vector3 enemyPosition = mapChipField_->GetMapChipPositionByIndex(27 + i * 4, 18);
 		newenemy_->Initialize(enemy_model_, &camera_, enemyPosition);
 
 		enemies_.push_back(newenemy_);
+	}
+
+	for (int32_t i = 0; i < 12; ++i) {
+		// エネミーの初期化
+		Enemy* newenemy2_ = new Enemy;
+		// エネミーの初期位置
+		Vector3 enemyPosition2 = mapChipField_->GetMapChipPositionByIndex(58 + i*2 , 20);
+		newenemy2_->Initialize(enemy_model_, &camera_, enemyPosition2);
+
+		enemies_.push_back(newenemy2_);
 	}
 
 	// モデル読み込み
