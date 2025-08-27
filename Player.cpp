@@ -134,7 +134,7 @@ void Player::BehaviorAttackInitialize() {
 void Player::BehaviorAttackUpdate() {
 
 	// 攻撃時に起こる移動
-	const Vector3 attackVelocity = {0.8f, 0.0f, 0.0f};
+	const Vector3 attackVelocity = {0.0f, -0.05f, 0.0f};
 
 	// 攻撃動作用の速度
 	Vector3 velocity{};
@@ -165,7 +165,7 @@ void Player::BehaviorAttackUpdate() {
 		if (lrDirection_ == LRDirection::kRight) {
 			velocity = {+attackVelocity.x, +attackVelocity.y, +attackVelocity.z};
 		} else {
-			velocity = {-attackVelocity.x, -attackVelocity.y, -attackVelocity.z};
+			velocity = {-attackVelocity.x, +attackVelocity.y, -attackVelocity.z};
 		}
 		// 攻撃の更新処理
 		float t = static_cast<float>(attackParameter_) / kActionTime;
