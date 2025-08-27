@@ -85,7 +85,7 @@ void GameScene::Initialize() {
 		// エネミーの初期化
 		Enemy* newenemy_ = new Enemy;
 		// エネミーの初期位置
-		Vector3 enemyPosition = mapChipField_->GetMapChipPositionByIndex(27 + i * 4, 21);
+		Vector3 enemyPosition = mapChipField_->GetMapChipPositionByIndex(37 + i * 4, 21);
 		newenemy_->Initialize(enemy_model_, &camera_, enemyPosition);
 
 		enemies_.push_back(newenemy_);
@@ -95,7 +95,7 @@ void GameScene::Initialize() {
 		// エネミーの初期化
 		Enemy* newenemy2_ = new Enemy;
 		// エネミーの初期位置
-		Vector3 enemyPosition2 = mapChipField_->GetMapChipPositionByIndex(58 + i*2 , 23);
+		Vector3 enemyPosition2 = mapChipField_->GetMapChipPositionByIndex(68 + i*2 , 23);
 		newenemy2_->Initialize(enemy_model_, &camera_, enemyPosition2);
 
 		enemies_.push_back(newenemy2_);
@@ -107,7 +107,7 @@ void GameScene::Initialize() {
 	key_ = new Key();
 	// 鍵のモデル
 	key_model_ = Model::CreateFromOBJ("key");
-	Vector3 keyPosition = mapChipField_->GetMapChipPositionByIndex(98, 21);
+	Vector3 keyPosition = mapChipField_->GetMapChipPositionByIndex(108, 21);
 	key_->Initialize(key_model_, &camera_, keyPosition);
 
 
