@@ -52,8 +52,6 @@ void Enemy::Update()
 		// タイマー加算
 		walkTimer_ += 1.0f / 60.0f;
 
-		// 回転アニメーション
-		worldTransform_.rotation_.x = std::sin(std::numbers::pi_v<float> * 2.0f * walkTimer_ / kWalkMotionTime); // ワールド行列更新
 		WorldTransformUpdate(worldTransform_);
 		break;
 
