@@ -210,10 +210,10 @@ void GameScene::Update() {
 		}
 
 		// ゴールチェック
-		//if (/* ゴールに到達 && player_->HasKey() */) {
-		//	isFinished_ = true;
-		//	result_ = Result::kClear;
-		//}
+		if (player_->IsGet() ) {
+			finished_ = true;
+			result_ = Result::kClear;
+		}
 
 		// カメラコントローラーの更新
 		cameraController_->Update();
@@ -262,6 +262,21 @@ void GameScene::Update() {
 		// 鍵の更新
 		key_->Update();
 
+		// 死亡チェック
+		//if (player_->IsDeath()) {
+		//	phase_ = Phase::kDeath;
+		//	finished_ = true;
+		//	result_ = Result::kDead;
+		//	return;
+		//}
+
+		// ゴールチェック
+		if (player_->IsGet()) {
+			phase_ = Phase::kClear;
+			finished_ = true;
+			result_ = Result::kClear;
+			return;
+		}
 
 		// カメラコントローラーの更新
 		cameraController_->Update();
@@ -328,6 +343,14 @@ void GameScene::Update() {
 		// デスパーティクルの更新
 		if (deathParticles_) {
 			deathParticles_->Update();
+		}
+
+				// 死亡チェック
+		if (player_->IsDeath()) {
+			phase_ = Phase::kDeath;
+			finished_ = true;
+			result_ = Result::kDead;
+			return;
 		}
 
 		break;

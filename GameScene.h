@@ -16,6 +16,12 @@ using namespace KamataEngine;
 class GameScene {
 public:
 
+	enum class Result {
+		kNone,
+		kClear,
+		kDead,
+	};
+
 	~GameScene();
 	// 初期化
 	void Initialize();
@@ -33,12 +39,6 @@ public:
 	void CheckAllCollisions();
 
 	bool IsFinished() const { return finished_; }
-
-	enum class Result {
-		kNone,
-		kClear,
-		kDead,
-	};
 
 	Result GetResult() const { return result_; }
 
