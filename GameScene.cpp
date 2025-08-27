@@ -124,9 +124,16 @@ void GameScene::ChangePhase() {
 			// デスパーティクルの初期化
 			deathParticles_ = new DeathParticles;
 			deathParticles_->Initialize(deathParticle_model_, &camera_, deathParticlesPosition);
+		} else if (key_->isGet()) {
+			// クリア演出フェーズに切り替え
+			phase_ = Phase::kClear;
+
 		}
 		break;
 	case Phase::kDeath:
+		break;
+	case Phase::kClear:
+
 		break;
 	}
 }
@@ -203,17 +210,7 @@ void GameScene::Update() {
 		// 鍵の更新
 		key_->Update();
 
-		    // 死亡チェック
-		if (player_->IsDeath()) {
-			finished_ = true;
-			result_ = Result::kDead;
-		}
 
-		// ゴールチェック
-		if (player_->IsGet() ) {
-			finished_ = true;
-			result_ = Result::kClear;
-		}
 
 		// カメラコントローラーの更新
 		cameraController_->Update();
@@ -262,21 +259,9 @@ void GameScene::Update() {
 		// 鍵の更新
 		key_->Update();
 
-		// 死亡チェック
-		//if (player_->IsDeath()) {
-		//	phase_ = Phase::kDeath;
-		//	finished_ = true;
-		//	result_ = Result::kDead;
-		//	return;
-		//}
 
-		// ゴールチェック
-		if (player_->IsGet()) {
-			phase_ = Phase::kClear;
-			finished_ = true;
-			result_ = Result::kClear;
-			return;
-		}
+
+	
 
 		// カメラコントローラーの更新
 		cameraController_->Update();
@@ -345,22 +330,16 @@ void GameScene::Update() {
 			deathParticles_->Update();
 		}
 
-				// 死亡チェック
-		if (player_->IsDeath()) {
-			phase_ = Phase::kDeath;
-			finished_ = true;
-			result_ = Result::kDead;
-			return;
-		}
+
 
 		break;
 
 	case Phase::kClear:
 		// クリア演出の更新
-		// （ここにクリア演出の処理を追加）
 		// クリア演出が終了したらフェードアウトフェーズへ移行
-		phase_ = Phase::kFadeOut;
-
+		if (key_ && key_->IsFinished()) {
+			phase_ = Phase::kFadeOut;
+		}
 		// 天球の更新
 		skydome_->Update();
 
@@ -381,7 +360,22 @@ void GameScene::Update() {
 
 		// フェードアウトが終了したらゲームシーンを終了
 		if (fade_->IsFinished()) {
-			finished_ = true;
+
+			// 死亡チェック
+			if (player_->IsDeath()) {
+				phase_ = Phase::kDeath;
+				finished_ = true;
+				result_ = Result::kDead;
+				return;
+			}
+
+			// ゴールチェック
+			if (player_->IsGet()) {
+				phase_ = Phase::kClear;
+				finished_ = true;
+				result_ = Result::kClear;
+				return;
+			}
 		}
 
 		// 天球の更新
@@ -397,6 +391,7 @@ void GameScene::Update() {
 
 		// 鍵の更新
 		key_->Update();
+
 
 
 		break;

@@ -42,6 +42,9 @@ public:
 		kGet,
 	};
 
+		bool IsFinished() { return isFinished_; }
+
+
 private:
 	// ワールド変換データ
 	WorldTransform worldTransform_;
@@ -87,4 +90,6 @@ private:
 
 	// 基準位置
 	Vector3 basePosition_;
+
+		bool isFinished_ = false;
 };

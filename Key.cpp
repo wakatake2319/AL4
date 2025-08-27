@@ -22,6 +22,10 @@ void Key::Initialize(Model* model, Camera* camera, const Vector3& position) {
 	rotateTimer_ = 0.0f;
 }
 void Key::Update() {
+	// 終了なら何も表示しない
+	if (isFinished_) {
+		return;
+	}
 
 	// =========================
 	// Behavior遷移の実装
@@ -68,14 +72,23 @@ void Key::Update() {
 
 		if (counter_ >= kDefeatedTime) {
 			isGet_ = true;
+			counter_ = kDefeatedTime;
+			// 終了扱いにする
+			isFinished_ = true;
+
 		}
 
 		break;
 	}
 }
 void Key::Draw() {
+	// 終了なら何も表示しない
+	if (isFinished_) {
+		return;
+	}
+
 	// モデル描画
-	model_->Draw(worldTransform_, *camera_);
+	model_->Draw(worldTransform_, *camera_); 
 }
 
 Vector3 Key::GetWorldPosition() {
@@ -106,6 +119,6 @@ void Key::OnCollision(const Player* player) {
 		behaviorRequest_ = Behavior::kGet;
 		isCollisionDisabled_ = true;
 		// プレイヤーに鍵を渡す
-		const_cast<Player*>(player)->SetIsGet(true);
+		const_cast<Player*>(player)->IsGet();
 	
 }
