@@ -4,7 +4,6 @@
 #include "Player.h"
 
 void Enemy::Initialize(Model* model, Camera* camera, const Vector3& position) {
-	assert(model);
 	model_ = model;
 	camera_ = camera;
 

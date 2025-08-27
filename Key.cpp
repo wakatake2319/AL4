@@ -4,7 +4,6 @@
 #include <numbers>
 
 void Key::Initialize(Model* model, Camera* camera, const Vector3& position) {
-	assert(model);
 	model_ = model;
 	camera_ = camera;
 
