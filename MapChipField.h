@@ -61,7 +61,7 @@ private:
 
 
 	// ブロックの個数
-	static inline const uint32_t kNumBlockVirtical = 22;
-	static inline const uint32_t kNumBlockHorizontal = 120;
+	static inline const uint32_t kNumBlockVirtical = 25;
+	static inline const uint32_t kNumBlockHorizontal = 100;
 };
 

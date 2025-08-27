@@ -46,7 +46,7 @@ void GameScene::Initialize() {
 	player_ = new Player();
 	// プレイヤーのモデル
 	player_model_ = Model::CreateFromOBJ("player");
-	Vector3 playerPosition = mapChipField_->GetMapChipPositionByIndex(2, 18);
+	Vector3 playerPosition = mapChipField_->GetMapChipPositionByIndex(2, 21);
 	modelAttack_ = Model::CreateFromOBJ("attack_effect");
 
 	player_->SetMapChipField(mapChipField_);
@@ -74,8 +74,8 @@ void GameScene::Initialize() {
 	CameraController::Rect cameraArea = { 
 		12.0f, 
 		MapChipField::GetNumBlockHorizontal() * MapChipField::kBlockWidth - 12.0f,
-		8.0f, 
-		MapChipField::GetNumBlockVirtical() * MapChipField::kBlockHeight - 7.0f};
+		8.0f, // 下の範囲
+	    MapChipField::GetNumBlockVirtical() * MapChipField::kBlockHeight - 10.0f}; // 上の範囲
 	cameraController_->SetMovableArea(cameraArea);
 
 	// 敵モデル
@@ -85,7 +85,7 @@ void GameScene::Initialize() {
 		// エネミーの初期化
 		Enemy* newenemy_ = new Enemy;
 		// エネミーの初期位置
-		Vector3 enemyPosition = mapChipField_->GetMapChipPositionByIndex(27 + i * 4, 18);
+		Vector3 enemyPosition = mapChipField_->GetMapChipPositionByIndex(27 + i * 4, 21);
 		newenemy_->Initialize(enemy_model_, &camera_, enemyPosition);
 
 		enemies_.push_back(newenemy_);
@@ -95,7 +95,7 @@ void GameScene::Initialize() {
 		// エネミーの初期化
 		Enemy* newenemy2_ = new Enemy;
 		// エネミーの初期位置
-		Vector3 enemyPosition2 = mapChipField_->GetMapChipPositionByIndex(58 + i*2 , 20);
+		Vector3 enemyPosition2 = mapChipField_->GetMapChipPositionByIndex(58 + i*2 , 23);
 		newenemy2_->Initialize(enemy_model_, &camera_, enemyPosition2);
 
 		enemies_.push_back(newenemy2_);
@@ -107,7 +107,7 @@ void GameScene::Initialize() {
 	key_ = new Key();
 	// 鍵のモデル
 	key_model_ = Model::CreateFromOBJ("key");
-	Vector3 keyPosition = mapChipField_->GetMapChipPositionByIndex(98, 18);
+	Vector3 keyPosition = mapChipField_->GetMapChipPositionByIndex(98, 21);
 	key_->Initialize(key_model_, &camera_, keyPosition);
 
 
