@@ -8,6 +8,7 @@
 #include "DeatParticles.h"
 #include "Fade.h"
 #include "Key.h"
+#include "Sun.h"
 #include <filesystem>
 
 using namespace KamataEngine;
@@ -111,4 +112,10 @@ private:
 	Fade* fade_ = nullptr;
 
 	Result result_ = Result::kNone;
+
+	// 太陽
+	Sun* sun_ = nullptr;
+	Model* modelSun_ = nullptr;
+
+
 };

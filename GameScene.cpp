@@ -32,6 +32,7 @@ GameScene::~GameScene() {
 	delete deathParticles_;
 	delete deathParticle_model_;
 	delete key_;
+	delete modelSun_;
 }
 
 // 初期化
@@ -119,6 +120,11 @@ void GameScene::Initialize() {
 	fade_->Initialize();
 	fade_->Start(Fade::Status::FadeIn, 1.0f);
 	
+	// 3Dモデル(天球)の生成
+	modelSun_ = Model::CreateFromOBJ("sun", true);
+	sun_ = new Sun();
+	Vector3 sunPosition = {-10, 20,20};
+	sun_->Initialize(modelSun_, &camera_, sunPosition);
 }
 
 
@@ -219,6 +225,9 @@ void GameScene::Update() {
 		// 鍵の更新
 		key_->Update();
 
+		// 太陽の更新
+		sun_->Update();
+
 
 
 		// カメラコントローラーの更新
@@ -268,6 +277,9 @@ void GameScene::Update() {
 		// 鍵の更新
 		key_->Update();
 
+
+		// 太陽の更新
+		sun_->Update();
 
 
 	
@@ -333,6 +345,10 @@ void GameScene::Update() {
 		// 鍵の更新
 		key_->Update();
 
+		// 太陽の更新
+		sun_->Update();
+
+
 
 		// デスパーティクルの更新
 		if (deathParticles_) {
@@ -359,6 +375,11 @@ void GameScene::Update() {
 		for (Enemy* enemy : enemies_) {
 			enemy->Update();
 		}
+
+		// 太陽の更新
+		sun_->Update();
+
+
 
 		break;
 
@@ -401,6 +422,9 @@ void GameScene::Update() {
 		// 鍵の更新
 		key_->Update();
 
+		// 太陽の更新
+		sun_->Update();
+
 
 
 		break;
@@ -420,6 +444,9 @@ void GameScene::Draw() {
 
 	// 天球描画
 	skydome_->Draw();
+
+	// 太陽描画
+	sun_->Draw();
 
 	// プレイヤー描画
 	if (!player_->IsDeath()) {
