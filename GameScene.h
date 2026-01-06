@@ -117,5 +117,5 @@ private:
 	Sun* sun_ = nullptr;
 	Model* modelSun_ = nullptr;
 
-
+	float deltaTime_ = 1.0f / 60.0f;
 };

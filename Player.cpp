@@ -5,7 +5,8 @@
 #include <cassert>
 #include <numbers>
 #include "MapChipField.h"
-void Player::Update() {
+
+void Player::Update(float deltaTime) {
 
 	// =========================
 	// Behavior遷移の実装
@@ -59,6 +60,8 @@ void Player::Update() {
 
 	WorldTransformUpdate(worldTransform_);
 	WorldTransformUpdate(worldTransformAttack_);
+
+	model_->Update(deltaTime);
 }
 
 // ================================
@@ -67,6 +70,8 @@ void Player::Update() {
 void Player::BehaviorRootInitialize() {
 }
 
+
+// 移動
 void Player::BehaviorRootUpdate() {
 
 	
@@ -223,7 +228,8 @@ void Player::BehaviorAttackUpdate() {
 void Player::Initialize(Model* model, Model* modelAttack, Camera* camera, const Vector3& position) {
 
 	assert(model);
-	model_ = model;
+	model_ = std::make_unique<KamataEngine::AnimatedModel>();
+	model_->Load("player.glb");
 	modelAttack_ = modelAttack;
 
 
@@ -240,6 +246,10 @@ void Player::Initialize(Model* model, Model* modelAttack, Camera* camera, const 
 	worldTransformAttack_.rotation_ = worldTransform_.rotation_;
 
 	camera_ = camera;
+
+	// glTF内のアニメーション番号を取得
+	walkAnim_ = model_->FindAnimation("Walk");
+	attackAnim_ = model_->FindAnimation("Attack");
 }
 
 // 移動
@@ -716,6 +726,10 @@ Vector3 Player::CornerPosition(const Vector3& center, Corner corner) {
 
 
 }
+
+void Player::Move() { model_->PlayAnimation(walkAnim_, true); }
+
+void Player::Attack() { model_->PlayAnimation(attackAnim_, false); }
 
 // 描画
 void Player::Draw() {

@@ -1,6 +1,8 @@
 #pragma once
 #include "KamataEngine.h"
 #include "Math.h"
+#include "AnimationModel.h"
+#include <memory>
 
 using namespace KamataEngine;
 
@@ -8,7 +10,6 @@ using namespace KamataEngine;
 class MapChipField;
 class Enemy;
 class Key;
-
 
 
 class Player {
@@ -57,11 +58,13 @@ public:
 		kRecovery,
 	};
 
+	enum class PlayerState { Idle, Walk, Attack };
+
 	// 初期化
 	void Initialize(Model* model, Model* modelAttack, Camera* camera, const Vector3& position);
 
 	// 更新
-	void Update();
+	void Update(float deltaTime);
 
 	// 描画
 	void Draw();
@@ -107,8 +110,14 @@ public:
 	// 攻撃しているかどうか
 	bool IsAttack() const { return behavior_ == Behavior::kAttack && attackPhase_ == AttackPhase::kAction; }
 
+	// 移動
+	void Move();
+
+	// 攻撃
+	void Attack();
 
 private:
+
 	// ワールド変換データ
 	WorldTransform worldTransform_;
 
@@ -131,7 +140,8 @@ private:
 	// 空中ジャンプができるか
 	bool isAirJump = false;
 	// 空中ジャンプできるまでのラグ
-	static inline const int kAirJumpLag = 10; 	// 空中ジャンプまでのラグタイマー
+	static inline const int kAirJumpLag = 10; 
+	// 空中ジャンプまでのラグタイマー
 	int airJumpLagTimer = 0; 
 
 	// ===============================
@@ -263,4 +273,13 @@ private:
 	Model* modelAttack_ = nullptr;
 	WorldTransform worldTransformAttack_;
 
+	// アニメーション
+	enum class State { Idle, Walk, Attack };
+
+	State state_ = State::Idle;
+
+	std::unique_ptr<KamataEngine::AnimatedModel> model_;
+
+	int walkAnim_ = -1;
+	int attackAnim_ = -1;
 };

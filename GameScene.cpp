@@ -215,7 +215,7 @@ void GameScene::Update() {
 		skydome_->Update();
 
 		// プレイヤーの更新
-		player_->Update();
+		player_->Update(deltaTime_);
 
 		// 敵の更新
 		for (Enemy* enemy : enemies_) {
@@ -267,7 +267,7 @@ void GameScene::Update() {
 		skydome_->Update();
 
 		// プレイヤーの更新
-		player_->Update();
+		player_->Update(deltaTime_);
 
 		// 敵の更新
 		for (Enemy* enemy : enemies_) {
