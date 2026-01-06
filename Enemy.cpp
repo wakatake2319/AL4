@@ -12,12 +12,15 @@ void Enemy::Initialize(Model* model, Camera* camera, const Vector3& position) {
 	worldTransform_.translation_ = position;
 
 	// 初期回転
-	worldTransform_.rotation_.y = std::numbers::pi_v<float> * 3.0f / 2.0f;
-
+	baseRotationY_ = std::numbers::pi_v<float> * 3.0f / 2.0f;
+	walkAnimRotationY_ = 0.0f;
+	worldTransform_.rotation_.y = baseRotationY_;
 	// 速度設定
 	velocity_ = {-kWalkSpeed, 0, 0};
 
 	walkTimer_ = 0.0f;
+
+
 }
 void Enemy::Update()
 {
@@ -28,6 +31,7 @@ void Enemy::Update()
 	if (behaviorRequest_ != Behavior::kUnknown) {
 		// 振る舞いを変更する
 		behavior_ = behaviorRequest_;
+
 		// 各振る舞いごとの初期化を実行
 		switch (behavior_) {
 
@@ -43,26 +47,42 @@ void Enemy::Update()
 
 
 	switch (behavior_) {
-	case Behavior::kRoot:
+	case Behavior::kRoot: {
 
-		if (walkTimer_ >= 300.0f) {
+		if (walkTimer_ >= 500.0f) {
 			walkTimer_ = 0.0f;
 			velocity_ *= -1.0f;
+
+			// 反転後の向きに合わせて回転を設定する
+			if (velocity_.x > 0.0f) {
+				// 右向き
+				baseRotationY_ = std::numbers::pi_v<float> / 2.0f;
+			} else {
+				// 左向き
+				baseRotationY_ = std::numbers::pi_v<float> * 3.0f / 2.0f;
+			}
 		}
 
 		// 移動
 		worldTransform_.translation_ += velocity_;
 
+		// 歩行アニメーション
+		const float kWalkSwing = ToRadians(5.0f);
 
+		walkAnimRotationY_ = sinf(walkTimer_ * 0.1f) * kWalkSwing;
+
+		worldTransform_.rotation_.y = baseRotationY_ + walkAnimRotationY_;
 
 		// タイマー加算
-		walkTimer_ ++;
+		walkTimer_++;
 
 		WorldTransformUpdate(worldTransform_);
 		break;
+	}
 
 		// デス演出
-	case Behavior::kDeath:
+	case Behavior::kDeath: {
+
 		// デス演出のカウンターを進める
 		counter_ += 1.0f / 60.0f;
 
@@ -77,6 +97,7 @@ void Enemy::Update()
 		}
 
 		break;
+	}
 	}
 
 }

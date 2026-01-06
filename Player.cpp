@@ -370,9 +370,6 @@ void Player::InputMove() {
 			// ジャンプ初速
 			velocity_ += Vector3(0.0f, kJumpAcceleration / 60.0f, 0.0f);
 
-			// 空中ジャンプ使用可
-			isAirJump = true;
-			airJumpLagTimer = kAirJumpLag;
 
 
 		}
@@ -437,17 +434,7 @@ void Player::InputMove() {
 			velocity_.x *= (1.0f - kAttelerationOnsky);
 		}
 
-		// =========================
-		// ジャンプ入力　空中時
-		// =========================
-		if (Input::GetInstance()->TriggerKey(DIK_UP) || Input::GetInstance()->TriggerKey(DIK_W) && !onGround_) {
-			if (isAirJump && airJumpLagTimer <= 0) {
-				// ジャンプ初速
-				velocity_ += Vector3(0.0f, kAirJumpAcceleration / 60.0f, 0.0f);
-				// 空中ジャンプ使用不可
-				isAirJump = false;
-			}
-		}
+
 
 		// 毎フレーム処理（タイマー減少）
 		if (airJumpLagTimer > 0) {

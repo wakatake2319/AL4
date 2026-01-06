@@ -72,6 +72,10 @@ private:
 	// 経過時間
 	float walkTimer_ = 0.0f;
 
+	float baseRotationY_ = 0.0f;     // 向き
+	float walkAnimRotationY_ = 0.0f; // 歩行アニメーション
+
+
 	// 当たり判定の大きさ
 	static inline const float kWidth = 0.8f;
 	static inline const float kHeight = 0.8f;

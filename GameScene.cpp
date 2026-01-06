@@ -101,22 +101,59 @@ void GameScene::Initialize() {
 
 	for (int32_t i = 0; i < 2; ++i) {
 		// エネミーの初期化
-		Enemy* newenemy_ = new Enemy;
-		// エネミーの初期位置
-		Vector3 enemyPosition = mapChipField_->GetMapChipPositionByIndex(37 + i * 4, 21);
-		newenemy_->Initialize(enemy_model_, &camera_, enemyPosition);
-
-		enemies_.push_back(newenemy_);
-	}
-
-	for (int32_t i = 0; i < 12; ++i) {
-		// エネミーの初期化
 		Enemy* newenemy2_ = new Enemy;
 		// エネミーの初期位置
-		Vector3 enemyPosition2 = mapChipField_->GetMapChipPositionByIndex(68 + i*2 , 23);
-		newenemy2_->Initialize(enemy_model_, &camera_, enemyPosition2);
+		Vector3 enemyPosition = mapChipField_->GetMapChipPositionByIndex(37 + i * 4, 21);
+		newenemy2_->Initialize(enemy_model_, &camera_, enemyPosition);
 
 		enemies_.push_back(newenemy2_);
+	}
+
+	for (int32_t i = 0; i < 2; ++i) {
+		// エネミーの初期化
+		Enemy* newenemy3_ = new Enemy;
+		// エネミーの初期位置
+		Vector3 enemyPosition = mapChipField_->GetMapChipPositionByIndex(20 + i * 4, 10 - i);
+		newenemy3_->Initialize(enemy_model_, &camera_, enemyPosition);
+
+		enemies_.push_back(newenemy3_);
+	}
+	for (int32_t i = 0; i < 3; ++i) {
+		// エネミーの初期化
+		Enemy* newenemy3_ = new Enemy;
+		// エネミーの初期位置
+		Vector3 enemyPosition = mapChipField_->GetMapChipPositionByIndex(36 + i * 4, 10 + i);
+		newenemy3_->Initialize(enemy_model_, &camera_, enemyPosition);
+
+		enemies_.push_back(newenemy3_);
+	}
+	for (int32_t i = 0; i < 3; ++i) {
+		// エネミーの初期化
+		Enemy* newenemy3_ = new Enemy;
+		// エネミーの初期位置
+		Vector3 enemyPosition = mapChipField_->GetMapChipPositionByIndex(60, 10 + i);
+		newenemy3_->Initialize(enemy_model_, &camera_, enemyPosition);
+
+		enemies_.push_back(newenemy3_);
+	}
+	for (int32_t i = 0; i < 3; ++i) {
+		// エネミーの初期化
+		Enemy* newenemy3_ = new Enemy;
+		// エネミーの初期位置
+		Vector3 enemyPosition = mapChipField_->GetMapChipPositionByIndex(70 + i * 4, 21 - i);
+		newenemy3_->Initialize(enemy_model_, &camera_, enemyPosition);
+
+		enemies_.push_back(newenemy3_);
+	}
+
+	for (int32_t i = 0; i < 3; ++i) {
+		// エネミーの初期化
+		Enemy* newenemy3_ = new Enemy;
+		// エネミーの初期位置
+		Vector3 enemyPosition = mapChipField_->GetMapChipPositionByIndex(87 + i * 2, 13);
+		newenemy3_->Initialize(enemy_model_, &camera_, enemyPosition);
+
+		enemies_.push_back(newenemy3_);
 	}
 
 	// モデル読み込み
