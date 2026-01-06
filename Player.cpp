@@ -55,10 +55,12 @@ void Player::Update() {
 
 	//BehaviorRootUpdate();
 
+worldTransform_.rotation_.x = baseRotationX_ + attackRecoilX_;
 
 
 	WorldTransformUpdate(worldTransform_);
 	WorldTransformUpdate(worldTransformAttack_);
+
 }
 
 // ================================
@@ -110,6 +112,7 @@ void Player::BehaviorRootUpdate() {
 
 		// 自キャラの角度を設定する
 		worldTransform_.rotation_.y = EaseInOut(destinationRotationY, turnFirstRotationY_, turnTimer_ / kTimeTurn);
+
 	}
 
 	//WorldTransformUpdate(worldTransform_);
@@ -118,6 +121,7 @@ void Player::BehaviorRootUpdate() {
 		// 攻撃ビヘイビアをリクエスト
 		behaviorRequest_ = Behavior::kAttack;
 	}
+	baseRotationX_ = worldTransform_.rotation_.x;
 }
 
 void Player::BehaviorAttackInitialize() {
@@ -130,16 +134,19 @@ void Player::BehaviorAttackInitialize() {
 	attackPhase_ = AttackPhase::kAnticipation;
 }
 
-// 攻撃時動作
 void Player::BehaviorAttackUpdate() {
 
 	// 攻撃時に起こる移動
-	const Vector3 attackVelocity = {0.0f, -0.05f, 0.0f};
+	const Vector3 attackVelocity = {-0.4f, 0.0f, 0.0f};
 
 	// 攻撃動作用の速度
 	Vector3 velocity{};
 
-		// 予備動作
+	// のけぞり最大角度（ラジアン）
+	const float kRecoilAngle = -std::numbers::pi_v<float> / 12.0f; // 約-15度
+
+
+	// 予備動作
 	attackParameter_ += 1;
 
 	switch (attackPhase_) {
@@ -147,8 +154,11 @@ void Player::BehaviorAttackUpdate() {
 	case AttackPhase::kAnticipation:
 	default: {
 		float t = static_cast<float>(attackParameter_) / kAnticipationTime;
+		float tAttack = static_cast<float>(attackParameter_) / kAnticipationTime;
 		worldTransform_.scale_.z = EaseOut(1.0f, 0.3f, t);
 		worldTransform_.scale_.y = EaseOut(1.0f, 1.6f, t);
+		attackRecoilX_ = EaseOut(0.0f, kRecoilAngle, tAttack);
+
 		// 前進動作へ移行
 		if (attackParameter_ >= kAnticipationTime) {
 			// 攻撃フェーズを前進動作に変更
@@ -157,16 +167,19 @@ void Player::BehaviorAttackUpdate() {
 		}
 		break;
 	}
-		
 
-		
 		// 攻撃動作
 	case AttackPhase::kAction: {
+
+		attackRecoilX_ = kRecoilAngle;
+
 		if (lrDirection_ == LRDirection::kRight) {
-			velocity += attackVelocity;
+			velocity = {+attackVelocity.x, +attackVelocity.y, +attackVelocity.z};
 		} else {
-			velocity -= attackVelocity;
+			velocity = {-attackVelocity.x, -attackVelocity.y, -attackVelocity.z};
 		}
+		
+
 		// 攻撃の更新処理
 		float t = static_cast<float>(attackParameter_) / kActionTime;
 		worldTransform_.scale_.z = EaseOut(0.3f, 1.3f, t);
@@ -175,17 +188,21 @@ void Player::BehaviorAttackUpdate() {
 		if (attackParameter_ >= kActionTime) {
 			// 攻撃フェーズを前進動作に変更
 			attackPhase_ = AttackPhase::kRecovery;
+			attackParameter_ = 0; // カウンター初期化
 		}
-	}
-		break;
+	} break;
 
 	// 余韻動作
 	case AttackPhase::kRecovery: {
 
 		// 攻撃の余韻処理
 		float t = static_cast<float>(attackParameter_) / kRecoveryTime;
+		float tAttack = static_cast<float>(attackParameter_) / kRecoveryTime;
+
 		worldTransform_.scale_.z = EaseOut(1.3f, 1.0f, t);
 		worldTransform_.scale_.y = EaseOut(0.7f, 1.0f, t);
+		attackRecoilX_ = EaseOut(kRecoilAngle, 0.0f, tAttack);
+
 		// 通常行動に移行
 		if (attackParameter_ >= kRecoveryTime) {
 			behaviorRequest_ = Behavior::kRoot;
@@ -194,7 +211,6 @@ void Player::BehaviorAttackUpdate() {
 	}
 	}
 
-	
 	// 衝突情報を初期化
 	CollisionMapInfo collisionMapInfo = {};
 	collisionMapInfo.move = velocity;
@@ -204,19 +220,19 @@ void Player::BehaviorAttackUpdate() {
 	// マップ衝突チェック
 	MapCollision(collisionMapInfo);
 	// 移動
-	velocity_.x += kAcceleration;
+	// velocity_.x += kAcceleration;
 	worldTransform_.translation_ += collisionMapInfo.move;
 
-
-	//既定の時間経過で攻撃終了して通常状態に戻す
-	//if (attackParameter_ >= 60.0f) {
-	//    // 通常行動に戻す
-	//    behaviorRequest_ = Behavior::kRoot;
-	//}
+	// 既定の時間経過で攻撃終了して通常状態に戻す
+	// if (attackParameter_ >= 60.0f) {
+	//     // 通常行動に戻す
+	//     behaviorRequest_ = Behavior::kRoot;
+	// }
 
 	worldTransformAttack_.translation_ = worldTransform_.translation_;
 	worldTransformAttack_.rotation_ = worldTransform_.rotation_;
 }
+
 
 // 初期化
 void Player::Initialize(Model* model, Model* modelAttack, Camera* camera, const Vector3& position) {
@@ -403,7 +419,7 @@ void Player::InputMove() {
 		// 落下速度
 		velocity_ += Vector3(0.0f, -kGravityAcceleration / 60.0f, 0.0f);
 		// 落下速度の制限
-		velocity_.y = std::max(velocity_.y, -kLimitFallSpeed);
+		velocity_.y = std::max(velocity_.y, -kLimitFallSpeed/2);
 	}
 
 }

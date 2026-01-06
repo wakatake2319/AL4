@@ -131,7 +131,8 @@ private:
 	// 空中ジャンプができるか
 	bool isAirJump = false;
 	// 空中ジャンプできるまでのラグ
-	static inline const int kAirJumpLag = 10; 	// 空中ジャンプまでのラグタイマー
+	static inline const int kAirJumpLag = 3; 
+	// 空中ジャンプまでのラグタイマー
 	int airJumpLagTimer = 0; 
 
 	// ===============================
@@ -262,5 +263,10 @@ private:
 	// 攻撃エフェクト
 	Model* modelAttack_ = nullptr;
 	WorldTransform worldTransformAttack_;
+
+	// 攻撃時にのけぞる
+	float attackRecoilX_ = 0.0f;
+	float baseRotationX_ = 0.0f;
+
 
 };

@@ -33,6 +33,12 @@ GameScene::~GameScene() {
 	delete deathParticle_model_;
 	delete key_;
 	delete modelSun_;
+	delete sun_;
+	delete fade_;
+	delete cameraController_;
+	delete skydome_;
+	delete player_;
+
 }
 
 // 初期化
