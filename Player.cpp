@@ -163,9 +163,9 @@ void Player::BehaviorAttackUpdate() {
 		// 攻撃動作
 	case AttackPhase::kAction: {
 		if (lrDirection_ == LRDirection::kRight) {
-			velocity = {+attackVelocity.x, +attackVelocity.y, +attackVelocity.z};
+			velocity += attackVelocity;
 		} else {
-			velocity = {-attackVelocity.x, +attackVelocity.y, -attackVelocity.z};
+			velocity -= attackVelocity;
 		}
 		// 攻撃の更新処理
 		float t = static_cast<float>(attackParameter_) / kActionTime;
@@ -175,7 +175,6 @@ void Player::BehaviorAttackUpdate() {
 		if (attackParameter_ >= kActionTime) {
 			// 攻撃フェーズを前進動作に変更
 			attackPhase_ = AttackPhase::kRecovery;
-			attackParameter_ = 0; // カウンター初期化
 		}
 	}
 		break;
@@ -205,7 +204,7 @@ void Player::BehaviorAttackUpdate() {
 	// マップ衝突チェック
 	MapCollision(collisionMapInfo);
 	// 移動
-	//velocity_.x += kAcceleration;
+	velocity_.x += kAcceleration;
 	worldTransform_.translation_ += collisionMapInfo.move;
 
 
