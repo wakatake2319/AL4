@@ -1,9 +1,9 @@
-#include "Key.h"
+#include "Akamushi.h"
 #include "Math.h"
 #include "Player.h"
 #include <numbers>
 
-void Key::Initialize(Model* model, Camera* camera, const Vector3& position) {
+void Akamushi::Initialize(Model* model, Camera* camera, const Vector3& position) {
 	model_ = model;
 	camera_ = camera;
 
@@ -20,7 +20,7 @@ void Key::Initialize(Model* model, Camera* camera, const Vector3& position) {
 
 	rotateTimer_ = 0.0f;
 }
-void Key::Update() {
+void Akamushi::Update() {
 	// 終了なら何も表示しない
 	if (isFinished_) {
 		return;
@@ -80,7 +80,7 @@ void Key::Update() {
 		break;
 	}
 }
-void Key::Draw() {
+void Akamushi::Draw() {
 	// 終了なら何も表示しない
 	if (isFinished_) {
 		return;
@@ -90,7 +90,7 @@ void Key::Draw() {
 	model_->Draw(worldTransform_, *camera_); 
 }
 
-Vector3 Key::GetWorldPosition() {
+Vector3 Akamushi::GetWorldPosition() {
 	// ワールド座標を入れる変数
 	Vector3 worldPos;
 	// ワールド行列の平行移動成分を取得（ワールド座標）
@@ -100,7 +100,7 @@ Vector3 Key::GetWorldPosition() {
 	return worldPos;
 }
 
-AABB Key::GetAABB() {
+AABB Akamushi::GetAABB() {
 
 	Vector3 worldPos = GetWorldPosition();
 
@@ -112,7 +112,7 @@ AABB Key::GetAABB() {
 	return aabb;
 }
 
-void Key::OnCollision(const Player* player) {
+void Akamushi::OnCollision(const Player* player) {
 	if (behavior_ == Behavior::kGet)
 		return;
 		behaviorRequest_ = Behavior::kGet;

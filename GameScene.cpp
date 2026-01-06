@@ -31,9 +31,11 @@ GameScene::~GameScene() {
 	}
 	delete deathParticles_;
 	delete deathParticle_model_;
-	delete key_;
-	delete modelSun_;
-	delete sun_;
+	delete akamushi_;
+	delete modelwakame_;
+	for (wakame* wakame : Wakames_) {
+		delete wakame;
+	}
 	delete fade_;
 	delete cameraController_;
 	delete skydome_;
@@ -101,69 +103,69 @@ void GameScene::Initialize() {
 
 	for (int32_t i = 0; i < 2; ++i) {
 		// エネミーの初期化
-		Enemy* newenemy2_ = new Enemy;
+		Enemy* newenemy_ = new Enemy;
 		// エネミーの初期位置
 		Vector3 enemyPosition = mapChipField_->GetMapChipPositionByIndex(37 + i * 4, 21);
-		newenemy2_->Initialize(enemy_model_, &camera_, enemyPosition);
+		newenemy_->Initialize(enemy_model_, &camera_, enemyPosition);
 
-		enemies_.push_back(newenemy2_);
+		enemies_.push_back(newenemy_);
 	}
 
 	for (int32_t i = 0; i < 2; ++i) {
 		// エネミーの初期化
-		Enemy* newenemy3_ = new Enemy;
+		Enemy* newenemy_ = new Enemy;
 		// エネミーの初期位置
 		Vector3 enemyPosition = mapChipField_->GetMapChipPositionByIndex(20 + i * 4, 10 - i);
-		newenemy3_->Initialize(enemy_model_, &camera_, enemyPosition);
+		newenemy_->Initialize(enemy_model_, &camera_, enemyPosition);
 
-		enemies_.push_back(newenemy3_);
+		enemies_.push_back(newenemy_);
 	}
 	for (int32_t i = 0; i < 3; ++i) {
 		// エネミーの初期化
-		Enemy* newenemy3_ = new Enemy;
+		Enemy* newenemy_ = new Enemy;
 		// エネミーの初期位置
 		Vector3 enemyPosition = mapChipField_->GetMapChipPositionByIndex(36 + i * 4, 10 + i);
-		newenemy3_->Initialize(enemy_model_, &camera_, enemyPosition);
+		newenemy_->Initialize(enemy_model_, &camera_, enemyPosition);
 
-		enemies_.push_back(newenemy3_);
+		enemies_.push_back(newenemy_);
 	}
 	for (int32_t i = 0; i < 3; ++i) {
 		// エネミーの初期化
-		Enemy* newenemy3_ = new Enemy;
+		Enemy* newenemy_ = new Enemy;
 		// エネミーの初期位置
 		Vector3 enemyPosition = mapChipField_->GetMapChipPositionByIndex(60, 10 + i);
-		newenemy3_->Initialize(enemy_model_, &camera_, enemyPosition);
+		newenemy_->Initialize(enemy_model_, &camera_, enemyPosition);
 
-		enemies_.push_back(newenemy3_);
+		enemies_.push_back(newenemy_);
 	}
 	for (int32_t i = 0; i < 3; ++i) {
 		// エネミーの初期化
-		Enemy* newenemy3_ = new Enemy;
+		Enemy* newenemy_ = new Enemy;
 		// エネミーの初期位置
 		Vector3 enemyPosition = mapChipField_->GetMapChipPositionByIndex(70 + i * 4, 21 - i);
-		newenemy3_->Initialize(enemy_model_, &camera_, enemyPosition);
+		newenemy_->Initialize(enemy_model_, &camera_, enemyPosition);
 
-		enemies_.push_back(newenemy3_);
+		enemies_.push_back(newenemy_);
 	}
 
 	for (int32_t i = 0; i < 3; ++i) {
 		// エネミーの初期化
-		Enemy* newenemy3_ = new Enemy;
+		Enemy* newenemy_ = new Enemy;
 		// エネミーの初期位置
 		Vector3 enemyPosition = mapChipField_->GetMapChipPositionByIndex(87 + i * 2, 13);
-		newenemy3_->Initialize(enemy_model_, &camera_, enemyPosition);
+		newenemy_->Initialize(enemy_model_, &camera_, enemyPosition);
 
-		enemies_.push_back(newenemy3_);
+		enemies_.push_back(newenemy_);
 	}
 
 	// モデル読み込み
 	deathParticle_model_ = Model::CreateFromOBJ("deathParticle");
 
-	key_ = new Key();
+	akamushi_ = new Akamushi();
 	// 鍵のモデル
-	key_model_ = Model::CreateFromOBJ("key");
-	Vector3 keyPosition = mapChipField_->GetMapChipPositionByIndex(108, 21);
-	key_->Initialize(key_model_, &camera_, keyPosition);
+	akamushi_model_ = Model::CreateFromOBJ("akamushi");
+	Vector3 akamushiPosition = mapChipField_->GetMapChipPositionByIndex(108, 21);
+	akamushi_->Initialize(akamushi_model_, &camera_, akamushiPosition);
 
 
 	// ゲームプレイフェーズから開始
@@ -174,11 +176,63 @@ void GameScene::Initialize() {
 	fade_->Initialize();
 	fade_->Start(Fade::Status::FadeIn, 1.0f);
 	
-	// 3Dモデル(天球)の生成
-	modelSun_ = Model::CreateFromOBJ("sun", true);
-	sun_ = new Sun();
-	Vector3 sunPosition = {-10, 20,20};
-	sun_->Initialize(modelSun_, &camera_, sunPosition);
+	// わかめの生成
+	modelwakame_ = Model::CreateFromOBJ("wakame", true);
+
+	for (int32_t i = 0; i < 3; ++i) {
+		// わかめの初期化
+		wakame* wakames_ = new wakame;
+		// わかめの初期位置
+		Vector3 wakamePosition = {10.0f + i * 30.0f, -10.0f, 20.0f};
+		wakames_->Initialize(modelwakame_, &camera_, wakamePosition);
+
+		Wakames_.push_back(wakames_);
+	}
+	for (int32_t i = 0; i < 6; ++i) {
+		// わかめの初期化
+		wakame* wakames_ = new wakame;
+		// わかめの初期位置
+		Vector3 wakamePosition = {10.0f + i * 30.0f, -10.0f, 40.0f};
+		wakames_->Initialize(modelwakame_, &camera_, wakamePosition);
+
+		Wakames_.push_back(wakames_);
+	}
+	for (int32_t i = 0; i < 4; ++i) {
+		// わかめの初期化
+		wakame* wakames_ = new wakame;
+		// わかめの初期位置
+		Vector3 wakamePosition = {0.0f + i * 20.0f, -10.0f, 30.0f + i * 25};
+		wakames_->Initialize(modelwakame_, &camera_, wakamePosition);
+
+		Wakames_.push_back(wakames_);
+	}
+	for (int32_t i = 0; i < 4; ++i) {
+		// わかめの初期化
+		wakame* wakames_ = new wakame;
+		// わかめの初期位置
+		Vector3 wakamePosition = {70.0f + i * 10.0f, -10.0f, 30.0f + i * 5};
+		wakames_->Initialize(modelwakame_, &camera_, wakamePosition);
+
+		Wakames_.push_back(wakames_);
+	}
+	for (int32_t i = 0; i < 4; ++i) {
+		// わかめの初期化
+		wakame* wakames_ = new wakame;
+		// わかめの初期位置
+		Vector3 wakamePosition = {80.0f + i * 20.0f, -10.0f, 38.0f + i * 36};
+		wakames_->Initialize(modelwakame_, &camera_, wakamePosition);
+
+		Wakames_.push_back(wakames_);
+	}
+	for (int32_t i = 0; i < 1; ++i) {
+		// わかめの初期化
+		wakame* wakames_ = new wakame;
+		// わかめの初期位置
+		Vector3 wakamePosition = {250.0f , -10.0f, 30.0f };
+		wakames_->Initialize(modelwakame_, &camera_, wakamePosition);
+
+		Wakames_.push_back(wakames_);
+	}
 }
 
 
@@ -193,7 +247,7 @@ void GameScene::ChangePhase() {
 			// デスパーティクルの初期化
 			deathParticles_ = new DeathParticles;
 			deathParticles_->Initialize(deathParticle_model_, &camera_, deathParticlesPosition);
-		} else if (key_->isGet()) {
+		} else if (akamushi_->isGet()) {
 			// クリア演出フェーズに切り替え
 			phase_ = Phase::kClear;
 
@@ -277,11 +331,12 @@ void GameScene::Update() {
 		}
 
 		// 鍵の更新
-		key_->Update();
+		akamushi_->Update();
 
-		// 太陽の更新
-		sun_->Update();
-
+		// わかめの更新
+		for (wakame* wakame : Wakames_) {
+			wakame->Update();
+		}
 
 
 		// カメラコントローラーの更新
@@ -329,12 +384,13 @@ void GameScene::Update() {
 		}
 
 		// 鍵の更新
-		key_->Update();
+		akamushi_->Update();
 
 
-		// 太陽の更新
-		sun_->Update();
-
+		// わかめの更新
+		for (wakame* wakame : Wakames_) {
+			wakame->Update();
+		}
 
 	
 
@@ -397,11 +453,12 @@ void GameScene::Update() {
 		}
 
 		// 鍵の更新
-		key_->Update();
+		akamushi_->Update();
 
-		// 太陽の更新
-		sun_->Update();
-
+		// わかめの更新
+		for (wakame* wakame : Wakames_) {
+			wakame->Update();
+		}
 
 
 		// デスパーティクルの更新
@@ -416,7 +473,7 @@ void GameScene::Update() {
 	case Phase::kClear:
 		// クリア演出の更新
 		// クリア演出が終了したらフェードアウトフェーズへ移行
-		if (key_ && key_->IsFinished()) {
+		if (akamushi_ && akamushi_->IsFinished()) {
 			phase_ = Phase::kFadeOut;
 		}
 		// 天球の更新
@@ -430,9 +487,10 @@ void GameScene::Update() {
 			enemy->Update();
 		}
 
-		// 太陽の更新
-		sun_->Update();
-
+		// わかめの更新
+		for (wakame* wakame : Wakames_) {
+			wakame->Update();
+		}
 
 
 		break;
@@ -474,11 +532,12 @@ void GameScene::Update() {
 		}
 
 		// 鍵の更新
-		key_->Update();
+		akamushi_->Update();
 
 		// 太陽の更新
-		sun_->Update();
-
+		for (wakame* wakame : Wakames_) {
+			wakame->Update();
+		}
 
 
 		break;
@@ -499,9 +558,10 @@ void GameScene::Draw() {
 	// 天球描画
 	skydome_->Draw();
 
-	// 太陽描画
-	sun_->Draw();
-
+	// わかめ描画
+	for (wakame* wakame : Wakames_) {
+		wakame->Draw();
+	}
 	// プレイヤー描画
 	if (!player_->IsDeath()) {
 		player_->Draw();
@@ -513,8 +573,8 @@ void GameScene::Draw() {
 	}
 
 	// 鍵の描画
-	if (!key_->isGet()) {
-		key_->Draw();
+	if (!akamushi_->isGet()) {
+		akamushi_->Draw();
 	}
 
 
@@ -571,12 +631,12 @@ void GameScene::CheckAllCollisions() {
 		// ==============================
 		{
 			aabb1 = player_->GetAABB();
-			aabb2 = key_->GetAABB();
+			aabb2 = akamushi_->GetAABB();
 
 			if (IsCollision(aabb1, aabb2)) {
 
-				player_->OnCollisionKey(key_);
-				key_->OnCollision(player_);
+				player_->OnCollisionAkamushi(akamushi_);
+				akamushi_->OnCollision(player_);
 			}
 		}
 

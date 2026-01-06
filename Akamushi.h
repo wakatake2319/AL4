@@ -5,7 +5,7 @@ using namespace KamataEngine;
 
 class Player;
 
-class Key {
+class Akamushi {
 
 public:
 	// 初期化

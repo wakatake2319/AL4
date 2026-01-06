@@ -2,7 +2,7 @@
 #include "KamataEngine.h"
 #include "Math.h"
 
-class Sun {
+class wakame {
 public:
 
 	// 初期化
@@ -25,7 +25,7 @@ private:
 	Camera* camera_;
 
 	// 
-	Sun* sun_ = nullptr;
+	wakame* sun_ = nullptr;
 
 	// 基準位置
 	Vector3 basePosition_;

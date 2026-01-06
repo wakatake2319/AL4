@@ -7,7 +7,7 @@ using namespace KamataEngine;
 // 前方宣言
 class MapChipField;
 class Enemy;
-class Key;
+class Akamushi;
 
 
 
@@ -82,7 +82,7 @@ public:
 
 	void OnCollisionEnemy(const Enemy* enemy);
 
-	void OnCollisionKey(const Key* key);
+	void OnCollisionAkamushi(const Akamushi* akamushi);
 
 	// デスフラグのgetter
 	bool IsDeath() const { return isDeath_; }

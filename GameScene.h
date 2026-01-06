@@ -7,8 +7,8 @@
 #include "Enemy.h"
 #include "DeatParticles.h"
 #include "Fade.h"
-#include "Key.h"
-#include "Sun.h"
+#include "Akamushi.h"
+#include "wakame.h"
 #include <filesystem>
 
 using namespace KamataEngine;
@@ -93,8 +93,8 @@ private:
 	std::list<Enemy*> enemies_;
 
 	// 鍵
-	Key* key_ = nullptr;
-	Model* key_model_ = nullptr;
+	Akamushi* akamushi_ = nullptr;
+	Model* akamushi_model_ = nullptr;
 
 
 	// デスパーティクル
@@ -113,9 +113,12 @@ private:
 
 	Result result_ = Result::kNone;
 
-	// 太陽
-	Sun* sun_ = nullptr;
-	Model* modelSun_ = nullptr;
+	// わかめ
+	wakame* wakame_ = nullptr;
+	Model* modelwakame_ = nullptr;
+
+	// わかめの複数化
+	std::list<wakame*> Wakames_;
 
 
 };

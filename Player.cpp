@@ -122,7 +122,7 @@ void Player::BehaviorRootUpdate() {
 
 	if (turnTimer_ <= 0.0f) {
 
-	if (Input::GetInstance()->PushKey(DIK_DOWN) || Input::GetInstance()->PushKey(DIK_S)) {
+	if (Input::GetInstance()->PushKey(DIK_SPACE)) {
 		// 攻撃ビヘイビアをリクエスト
 		behaviorRequest_ = Behavior::kAttack;
 	}
@@ -822,8 +822,8 @@ void Player::OnCollisionEnemy(const Enemy* enemy) {
 	isDeath_ = true;
 }
 
-void Player::OnCollisionKey(const Key* key) {
-	(void)key;
+void Player::OnCollisionAkamushi(const Akamushi* akamushi) {
+	(void)akamushi;
 	// キーフラグを立てる
 	isGet_ = true;
 }

@@ -1,7 +1,7 @@
-#include "Sun.h"
+#include "wakame.h"
 
 // 初期化
-void Sun::Initialize(Model* model, Camera* camera, const Vector3& position) {
+void wakame::Initialize(Model* model, Camera* camera, const Vector3& position) {
 	worldTransform_.Initialize();
 
 	model_ = model;
@@ -14,10 +14,10 @@ void Sun::Initialize(Model* model, Camera* camera, const Vector3& position) {
 }
 
 // 更新
-void Sun::Update() { WorldTransformUpdate(worldTransform_); }
+void wakame::Update() { WorldTransformUpdate(worldTransform_); }
 
 // 描画
-void Sun::Draw() {
+void wakame::Draw() {
 
 	// 3Dモデル描画
 	model_->Draw(worldTransform_, *camera_);
