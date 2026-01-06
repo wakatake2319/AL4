@@ -92,6 +92,17 @@ void GameScene::Initialize() {
 		// エネミーの初期化
 		Enemy* newenemy_ = new Enemy;
 		// エネミーの初期位置
+		Vector3 enemyPosition = mapChipField_->GetMapChipPositionByIndex(12 + i * 4, 21);
+		newenemy_->Initialize(enemy_model_, &camera_, enemyPosition);
+
+		enemies_.push_back(newenemy_);
+	}
+
+
+	for (int32_t i = 0; i < 2; ++i) {
+		// エネミーの初期化
+		Enemy* newenemy_ = new Enemy;
+		// エネミーの初期位置
 		Vector3 enemyPosition = mapChipField_->GetMapChipPositionByIndex(37 + i * 4, 21);
 		newenemy_->Initialize(enemy_model_, &camera_, enemyPosition);
 
@@ -532,6 +543,26 @@ void GameScene::CheckAllCollisions() {
 			}
 		}
 
+	}
+#pragma endregion
+#pragma region 自キャラの攻撃と敵キャラの当たり判定
+	{
+		// 攻撃中でなければ何もしない
+		if (player_->IsAttackHitActive()) {
+
+			// 攻撃判定のAABB
+			AABB attackAABB = player_->GetAttackAABB();
+
+			for (Enemy* enemy : enemies_) {
+
+				if (enemy->IsCollisionDisabled())
+					continue;
+
+        if (IsCollision(attackAABB, enemy->GetAABB())) {
+					enemy->OnHitByAttack();
+				}
+			}
+		}
 	}
 #pragma endregion
 }

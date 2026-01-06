@@ -61,6 +61,9 @@ worldTransform_.rotation_.x = baseRotationX_ + attackRecoilX_;
 	WorldTransformUpdate(worldTransform_);
 	WorldTransformUpdate(worldTransformAttack_);
 
+	UpdateAttackHitBox();
+
+
 }
 
 // ================================
@@ -117,9 +120,12 @@ void Player::BehaviorRootUpdate() {
 
 	//WorldTransformUpdate(worldTransform_);
 
+	if (turnTimer_ <= 0.0f) {
+
 	if (Input::GetInstance()->PushKey(DIK_DOWN) || Input::GetInstance()->PushKey(DIK_S)) {
 		// 攻撃ビヘイビアをリクエスト
 		behaviorRequest_ = Behavior::kAttack;
+	}
 	}
 	baseRotationX_ = worldTransform_.rotation_.x;
 }
@@ -231,8 +237,44 @@ void Player::BehaviorAttackUpdate() {
 
 	worldTransformAttack_.translation_ = worldTransform_.translation_;
 	worldTransformAttack_.rotation_ = worldTransform_.rotation_;
+
+	if (attackPhase_ == AttackPhase::kAction) {
+		isAttackHitBoxActive_ = true;
+	} else {
+		isAttackHitBoxActive_ = false;
+	}
 }
 
+void Player::UpdateAttackHitBox() {
+
+	if (!isAttackHitBoxActive_) {
+		return;
+	}
+
+	// 向き
+	Vector3 forward = (lrDirection_ == LRDirection::kRight) ? Vector3{1.0f, 0.0f, 0.0f} : Vector3{-1.0f, 0.0f, 0.0f};
+
+	// 目の前に出す距離
+	const float kOffsetX = kWidth / 2.0f + 0.5f;
+
+	Vector3 center = worldTransform_.translation_ + forward * kOffsetX;
+
+	// 高さ（胴体〜顔）
+	center.y += kHeight * 0.3f;
+
+	// 判定サイズ
+	Vector3 halfSize = {2.0f, 1.0f, 1.0f};
+
+	attackHitBox_.min = {center.x - halfSize.x, center.y - halfSize.y, center.z - halfSize.z};
+	attackHitBox_.max = center + halfSize;
+
+}
+
+bool Player::IsAttackHitActive() const { return isAttackHitBoxActive_; }
+
+const AABB& Player::GetAttackAABB() const { return attackHitBox_; }
+
+void Player::DisableAttackHit() { isAttackHitBoxActive_ = false; }
 
 // 初期化
 void Player::Initialize(Model* model, Model* modelAttack, Camera* camera, const Vector3& position) {

@@ -128,3 +128,11 @@ void Enemy::OnCollision(const Player* player) {
 
 }
 
+void Enemy::OnHitByAttack() {
+
+	if (behavior_ == Behavior::kDeath) {
+		return;
+	}
+
+	behaviorRequest_ = Behavior::kDeath;
+}

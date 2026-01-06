@@ -43,6 +43,9 @@ public:
 		kDeath,
 	};
 
+	// 衝突時コールバック
+	void OnHitByAttack();
+
 
 private:
 	// ワールド変換データ

@@ -107,6 +107,17 @@ public:
 	// 攻撃しているかどうか
 	bool IsAttack() const { return behavior_ == Behavior::kAttack && attackPhase_ == AttackPhase::kAction; }
 
+	// 攻撃判定ボックスの更新
+	void UpdateAttackHitBox();
+
+		// 攻撃当たり判定ボックス
+	AABB attackHitBox_;
+	bool isAttackHitBoxActive_ = false;
+
+	bool IsAttackHitActive() const;
+	const AABB& GetAttackAABB() const;
+	void DisableAttackHit();
+
 
 private:
 	// ワールド変換データ
