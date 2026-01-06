@@ -233,6 +233,11 @@ void GameScene::Initialize() {
 
 		Wakames_.push_back(wakames_);
 	}
+
+	// UI
+	uiTH_ = TextureManager::Load("UI.png");
+	uiSprite_ = Sprite::Create(uiTH_, Vector2(0.0f, 0.0f));
+	uiSprite_->SetSize(Vector2(1280.0f, 720.0f));
 }
 
 
@@ -594,6 +599,13 @@ void GameScene::Draw() {
 	}
 
 	Model::PostDraw();
+
+	// スプライト描画前処理
+	Sprite::PreDraw(dxCommon->GetCommandList());
+	// UI描画
+	uiSprite_->Draw();
+	// スプライト描画後処理
+	Sprite::PostDraw();
 
 	fade_->Draw();
 }

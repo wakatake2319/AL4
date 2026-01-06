@@ -4,13 +4,14 @@
 
 
 TitleScene::~TitleScene() {
-	delete modelPlayer_;
-	delete modelTitle_;
+	delete titleSceneSprite_;
 	delete fade_;
 }
 void TitleScene::Initialize() {
-	modelTitle_ = Model::CreateFromOBJ("titleFont", true);
-	modelPlayer_ = Model::CreateFromOBJ("player");
+
+	titleSceneTH_ = TextureManager::Load("titleScene/titleScene.png");
+	titleSceneSprite_ = Sprite::Create(titleSceneTH_, Vector2(0.0f, 0.0f));
+	titleSceneSprite_->SetSize(Vector2(1280.0f, 720.0f));
 
 	// カメラ初期化
 	camera_.Initialize();
@@ -90,12 +91,11 @@ void TitleScene::Draw() {
 	// コマンドリストの取得
 	ID3D12GraphicsCommandList* commandList = dxCommon_->GetCommandList();
 
-	Model::PreDraw(commandList);
+	Sprite::PreDraw(commandList);
 
-	modelTitle_->Draw(worldTransformTitle_, camera_);
-	modelPlayer_->Draw(worldTransformPlayer_, camera_);
+	titleSceneSprite_->Draw();
 
-	Model::PostDraw();
+	Sprite::PostDraw();
 
 	fade_->Draw();
 }

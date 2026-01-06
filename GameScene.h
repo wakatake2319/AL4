@@ -120,5 +120,8 @@ private:
 	// わかめの複数化
 	std::list<wakame*> Wakames_;
 
+	// UI
+	uint32_t uiTH_ = 0;
+	Sprite* uiSprite_ = nullptr;
 
 };

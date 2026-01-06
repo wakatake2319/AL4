@@ -33,8 +33,9 @@ private:
 	WorldTransform worldTransformClear_;
 	WorldTransform worldTransformPlayer_;
 
-	Model* modelPlayer_ = nullptr;
-	Model* modelClear_ = nullptr;
+	// クリアシーンのテクスチャ
+	uint32_t clearSceneTH_ = 0;
+	Sprite* clearSceneSprite_ = nullptr;
 
 	float counter_ = 0.0f;
 

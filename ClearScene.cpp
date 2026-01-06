@@ -3,13 +3,14 @@
 #include <numbers>
 
 ClearScene::~ClearScene() {
-	delete modelPlayer_;
-	delete modelClear_;
+	delete clearSceneSprite_;
 	delete fade_;
 }
 void ClearScene::Initialize() {
-	modelClear_ = Model::CreateFromOBJ("clear", true);
-	modelPlayer_ = Model::CreateFromOBJ("player");
+
+	clearSceneTH_ = TextureManager::Load("clearScene/clearScene.png");
+	clearSceneSprite_ = Sprite::Create(clearSceneTH_, Vector2(0.0f, 0.0f));
+	clearSceneSprite_->SetSize(Vector2(1280.0f, 720.0f));
 
 	// カメラ初期化
 	camera_.Initialize();
@@ -85,12 +86,12 @@ void ClearScene::Draw() {
 	// コマンドリストの取得
 	ID3D12GraphicsCommandList* commandList = dxCommon_->GetCommandList();
 
-	Model::PreDraw(commandList);
+	Sprite::PreDraw(commandList);
 
-	modelClear_->Draw(worldTransformClear_, camera_);
-	modelPlayer_->Draw(worldTransformPlayer_, camera_);
+	// クリアシーンのテクスチャを描画
+	clearSceneSprite_->Draw();
 
-	Model::PostDraw();
+	Sprite::PostDraw();
 
 	fade_->Draw();
 }

@@ -36,8 +36,9 @@ private:
 	WorldTransform worldTransformTitle_;
 	WorldTransform worldTransformPlayer_;
 
-	Model* modelPlayer_ = nullptr;
-	Model* modelTitle_ = nullptr;
+	// タイトルシーンのテクスチャ
+	uint32_t titleSceneTH_ = 0;
+	Sprite* titleSceneSprite_ = nullptr;
 
 	float counter_ = 0.0f;
 
