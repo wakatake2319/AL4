@@ -1,4 +1,5 @@
 #include "GameScene.h"
+#include <input\Input.h>
 
 using namespace KamataEngine;
 
@@ -238,6 +239,12 @@ void GameScene::Initialize() {
 	uiTH_ = TextureManager::Load("UI.png");
 	uiSprite_ = Sprite::Create(uiTH_, Vector2(0.0f, 0.0f));
 	uiSprite_->SetSize(Vector2(1280.0f, 720.0f));
+
+	// gltf
+	gltfModel_ = std::make_unique<GltfModel>();
+	gltfModel_->LoadFromGLTF("Resources/gltf/player.gltf");
+
+
 }
 
 
@@ -435,6 +442,15 @@ void GameScene::Update() {
 			}
 		}
 
+		if (Input::GetInstance()->PushKey(DIK_L)) {
+			animation_ = std::make_unique<animationModel>();
+			animation_->Initialize(gltfModel_.get(), &camera_, {0.0f, 0.0f, 0.0f});
+		}
+
+		if (animation_) {
+			animation_->Update();
+		}
+
 		// 全ての当たり判定
 		CheckAllCollisions();
 
@@ -596,6 +612,10 @@ void GameScene::Draw() {
 	// デスパーティクル描画
 	if (deathParticles_) {
 		deathParticles_->Draw();
+	}
+
+	if (animation_) {
+		animation_->Draw();
 	}
 
 	Model::PostDraw();

@@ -1,5 +1,6 @@
 #pragma once
 #pragma once
+#pragma once
 #include "KamataEngine.h"
 
 /// AL3サンプルプログラム用の数学ライブラリ。

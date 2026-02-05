@@ -9,6 +9,8 @@
 #include "Fade.h"
 #include "Akamushi.h"
 #include "wakame.h"
+#include "animationModel.h"
+#include "GltfModel.h"
 #include <filesystem>
 
 using namespace KamataEngine;
@@ -124,4 +126,7 @@ private:
 	uint32_t uiTH_ = 0;
 	Sprite* uiSprite_ = nullptr;
 
+	// gltfモデル
+	std::unique_ptr<GltfModel> gltfModel_;
+	std::unique_ptr<animationModel> animation_;
 };

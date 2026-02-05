@@ -113,6 +113,8 @@
     <ClCompile Include="Fade.cpp" />
     <ClCompile Include="GameScene.cpp" />
     <ClCompile Include="Akamushi.cpp" />
+    <ClCompile Include="animationModel.cpp" />
+    <ClCompile Include="GltfModel.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MapChipField.cpp" />
     <ClCompile Include="Math.cpp" />
@@ -204,6 +206,8 @@
     <ClInclude Include="Fade.h" />
     <ClInclude Include="GameScene.h" />
     <ClInclude Include="Akamushi.h" />
+    <ClInclude Include="animationModel.h" />
+    <ClInclude Include="GltfModel.h" />
     <ClInclude Include="MapChipField.h" />
     <ClInclude Include="Math.h" />
     <ClInclude Include="Player.h" />
